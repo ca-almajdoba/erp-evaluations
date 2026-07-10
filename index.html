@@ -499,10 +499,10 @@
         <div class="pad">
           <div class="title" id="heroTitle">التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك</div>
 
-          <a class="devLink" href="https://www.majdoba.me" target="_blank" rel="noopener noreferrer" id="devLink">
+          <a class="devLink" href="https://www.technofuntion.com" target="_blank" rel="noopener noreferrer" id="devLink">
             <span class="dot" aria-hidden="true"></span>
             <span id="devTextPrefix">مطور بواسطة</span>
-            <span id="devTextName">أحمد المجدوبة للاستشارات التقنية</span>
+            <span id="devTextName">TechnoFuntion - استشاريون نظم المعلومات</span>
           </a>
 
           <p class="sub" id="heroHint">
@@ -531,7 +531,7 @@
             </div>
             <div class="field">
               <label id="lblAssessor">اسم المُقيّم</label>
-              <input id="assessor" type="text" placeholder="مثال: أحمد المجدوبة" />
+              <input id="assessor" type="text" placeholder="مثال: أحمد " />
             </div>
             <div class="field">
               <label id="lblPhone">رقم الهاتف</label>
@@ -582,7 +582,7 @@
               style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Almarai',sans-serif; font-weight:400; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
 
             <div class="sub" style="margin-top:-4px;" id="sendNote">
-              ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@majdoba.me</b> لتقوم بإرسالها.
+              ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@technofuntion.com</b> لتقوم بإرسالها.
             </div>
           </div>
 
@@ -598,7 +598,7 @@
 
   <div class="footer">
     <div><span id="lastUpdateLabel">آخر تحديث:</span> <span id="clock">—</span></div>
-    <div style="color:var(--blue); font-weight:800;" id="footerDev">DEVELOPED BY: AHMAD MAJDOBA</div>
+    <div style="color:var(--blue); font-weight:800;" id="footerDev">DEVELOPED BY: TechnoFuntion</div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -614,7 +614,7 @@ const I18N = {
     appTagline: "أداة مجانية مبسطة لقياس الوضع العام",
     heroTitle: "التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك",
     devPrefix: "مطور بواسطة",
-    devName: "أحمد المجدوبة للاستشارات التقنية",
+    devName: "TechnoFuntion - استشاريون نظم المعلومات",
     heroHint: 'اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.',
     progressNotStarted: "لم تبدأ بعد",
     progressText: (a,t) => `أجبت على ${a} من ${t} سؤال`,
@@ -629,7 +629,7 @@ const I18N = {
     placeholders: {
       company: "مثال: شركة ABC",
       erp: "مثال: Odoo / SAP / Dynamics",
-      assessor: "مثال: أحمد المجدوبة",
+      assessor: "مثال: أحمد ",
       phone: "مثال: 079xxxxxxx",
       email: "example@company.com"
     },
@@ -649,7 +649,7 @@ const I18N = {
     formulaNote: "(النتيجة = مجموع الدرجات ÷ مجموع الأوزان) × 100",
     shareTitle: "ملخص سريع جاهز للمشاركة",
     shareSubtitle: "انسخ الملخص أو شاركه مباشرة",
-    sendNote: 'ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@majdoba.me</b> لتقوم بإرسالها.',
+    sendNote: 'ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@technofuntion.com</b> لتقوم بإرسالها.',
     lastUpdate: "آخر تحديث:",
     grades: {
       excellent: "ممتاز",
@@ -1194,7 +1194,7 @@ btnShare.addEventListener("click", () => {
 btnSend.addEventListener("click", () => {
   const sub = encodeURIComponent(I18N[LANG].mail.subject);
   const body = encodeURIComponent(summaryText.value + "\n\n" + I18N[LANG].mail.bodyFooter);
-  window.open(`mailto:info@majdoba.me?subject=${sub}&body=${body}`, "_self");
+  window.open(`mailto:info@technofuntion.com?subject=${sub}&body=${body}`, "_self");
 });
 
 btnCalculate.addEventListener("click", calculateResults);
