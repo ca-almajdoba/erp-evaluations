@@ -7,8 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- One font for both languages -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -30,7 +29,8 @@
 
     body{
       margin:0;
-      font-family:'Noto Kufi Arabic',system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      font-family:'Almarai', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 300; /* تعيين الوزن الافتراضي إلى لايت */
       background: var(--bg);
       color: var(--ink);
     }
@@ -69,7 +69,7 @@
     }
     @keyframes sweep{ 0%{transform:translateX(-120%)} 100%{transform:translateX(120%)} }
 
-    .brand h1{ margin:0; font-size: 14px; font-weight: 900; color: var(--blue); }
+    .brand h1{ margin:0; font-size: 14px; font-weight: 800; color: var(--blue); }
     .brand small{ display:block; margin-top:2px; color: var(--muted); font-size: 12px; font-weight: 700; }
 
     .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
@@ -78,11 +78,11 @@
       border: 1px solid transparent;
       border-radius: 14px;
       padding: 10px 12px;
-      font-weight: 900;
+      font-weight: 700;
       font-size: 12px;
       cursor:pointer;
       transition: transform .18s ease, box-shadow .18s ease;
-      font-family:'Noto Kufi Arabic',sans-serif;
+      font-family:'Almarai',sans-serif;
       background: rgba(255,255,255,.9);
       box-shadow: 0 12px 26px rgba(18,32,47,.10);
       color: var(--ink);
@@ -113,14 +113,14 @@
       border:1px solid transparent;
       border-radius: 12px;
       padding:8px 10px;
-      font-weight: 1000;
+      font-weight: 800;
       font-size: 12px;
       cursor:pointer;
       background: rgba(255,255,255,.9);
       color: var(--ink);
       transition: transform .18s ease, box-shadow .18s ease;
       user-select:none;
-      font-family:'Noto Kufi Arabic',sans-serif;
+      font-family:'Almarai',sans-serif;
     }
     .langChip.active{
       background: linear-gradient(135deg, rgba(0,112,192,.12), rgba(40,167,69,.12));
@@ -161,7 +161,7 @@
     }
     @keyframes sheen{ 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
 
-    .title{ margin: 10px 0 6px; font-size: 20px; font-weight: 1000; line-height: 1.9; }
+    .title{ margin: 10px 0 6px; font-size: 20px; font-weight: 800; line-height: 1.9; }
     .devLink{
       display:inline-flex; align-items:center; gap:10px;
       margin: 4px 0 12px;
@@ -171,15 +171,15 @@
       border: 1px solid rgba(0,112,192,.12);
       text-decoration:none;
       color: var(--ink);
-      font-weight: 900;
+      font-weight: 700;
       font-size: 12px;
       transition: transform .18s ease, box-shadow .18s ease;
     }
     .devLink:hover{ transform: translateY(-1px); box-shadow: 0 14px 34px rgba(18,32,47,.12); }
     .dot{ width:10px;height:10px;border-radius:999px; background: linear-gradient(135deg, var(--blue), var(--green)); }
-    .devLink span{ color: var(--blue); font-weight: 1000; }
+    .devLink span{ color: var(--blue); font-weight: 800; }
 
-    .sub{ margin:0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 2; }
+    .sub{ margin:0; color: var(--muted); font-size: 13px; font-weight: 400; line-height: 2; }
 
     /* Progress */
     .progressBox{
@@ -196,7 +196,7 @@
     }
     .progressText{
       font-size: 12px;
-      font-weight: 1000;
+      font-weight: 800;
       color: var(--ink);
     }
     .miniBarWrap{
@@ -234,7 +234,7 @@
     .field label{
       display:block;
       font-size: 11px;
-      font-weight: 1000;
+      font-weight: 800;
       color: var(--muted);
       margin-bottom: 6px;
     }
@@ -243,9 +243,9 @@
       border:0;
       outline:none;
       background: transparent;
-      font-weight: 900;
+      font-weight: 400;
       font-size: 13px;
-      font-family:'Noto Kufi Arabic',sans-serif;
+      font-family:'Almarai',sans-serif;
       color: var(--ink);
     }
     body.rtl .field input{ text-align:right; }
@@ -265,13 +265,14 @@
       gap:10px;
       flex-wrap:wrap;
     }
+
     .badge{
       padding: 8px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,.92);
       border: 1px solid var(--line);
       color: var(--blue);
-      font-weight: 1000;
+      font-weight: 800;
       font-size: 12px;
       white-space:nowrap;
     }
@@ -285,8 +286,8 @@
     body.rtl .big{ flex-direction: row-reverse; }
     body.ltr .big{ flex-direction: row; }
 
-    .pct{ font-size: 40px; font-weight: 1100; line-height:1; }
-    .grade{ font-size: 13px; font-weight: 1100; padding-bottom: 6px; color: var(--muted); }
+    .pct{ font-size: 40px; font-weight: 800; line-height:1; }
+    .grade{ font-size: 13px; font-weight: 800; padding-bottom: 6px; color: var(--muted); }
 
     .barWrap{
       margin-top: 12px;
@@ -326,7 +327,7 @@
 
     .boxTitle{
       font-size: 12px;
-      font-weight: 1100;
+      font-weight: 800;
       color: var(--ink);
       line-height: 1.9;
     }
@@ -334,7 +335,7 @@
       display:block;
       margin-top: 3px;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 700;
     }
 
     .btnGroup{
@@ -364,13 +365,13 @@
     }
     .section[data-accent="green"] .sectionHead::before{ background: var(--green); }
 
-    .sectionTitle{ margin:0; font-size: 14px; font-weight: 1100; }
+    .sectionTitle{ margin:0; font-size: 14px; font-weight: 800; }
     .sectionScore{ min-width: 160px; }
     body.rtl .sectionScore{ text-align:left; }
     body.ltr .sectionScore{ text-align:right; }
 
-    .sectionPct{ font-weight: 1100; font-size: 18px; line-height:1.1; }
-    .sectionLabel{ font-size: 11px; font-weight: 1000; color: var(--muted); margin-top: 4px; }
+    .sectionPct{ font-weight: 800; font-size: 18px; line-height:1.1; }
+    .sectionLabel{ font-size: 11px; font-weight: 800; color: var(--muted); margin-top: 4px; }
 
     .qList{ padding: 0 16px 16px; display:grid; gap:10px; }
     .q{
@@ -397,7 +398,7 @@
       flex-wrap:wrap;
     }
     .qText{
-      font-weight: 900;
+      font-weight: 300; /* جعل الأسئلة بخط المراعي لايت */
       font-size: 13px;
       line-height: 2;
       flex: 1 1 520px;
@@ -406,7 +407,7 @@
 
     .w{
       font-size: 12px;
-      font-weight: 1100;
+      font-weight: 800;
       color: var(--green);
       white-space:nowrap;
     }
@@ -417,12 +418,12 @@
       color: var(--ink);
       border-radius: 14px;
       padding: 9px 10px;
-      font-weight: 1000;
+      font-weight: 800;
       font-size: 12px;
       outline:none;
       cursor:pointer;
       min-width: 120px;
-      font-family:'Noto Kufi Arabic',sans-serif;
+      font-family:'Almarai',sans-serif;
       text-align: center;
       transition: box-shadow .18s ease;
     }
@@ -433,7 +434,7 @@
       margin: 0 auto;
       padding: 0 18px 30px;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 700;
       font-size: 12px;
       display:flex;
       align-items:center;
@@ -450,7 +451,7 @@
       border-radius: 14px;
       background: rgba(18,32,47,.92);
       color:#fff;
-      font-weight: 1000;
+      font-weight: 800;
       font-size: 12px;
       box-shadow: 0 16px 42px rgba(0,0,0,.22);
       opacity:0;
@@ -547,7 +548,7 @@
       <div class="card score">
         <div class="pad">
           <div class="scoreTop">
-            <div style="font-weight:1100;" id="overallTitle">النتيجة الإجمالية</div>
+            <div style="font-weight:800;" id="overallTitle">النتيجة الإجمالية</div>
             <div class="badge" id="overallBadge">لم يتم الاحتساب</div>
           </div>
 
@@ -578,7 +579,7 @@
             </div>
 
             <textarea id="summaryText" readonly
-              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Noto Kufi Arabic',sans-serif; font-weight:800; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
+              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Almarai',sans-serif; font-weight:400; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
 
             <div class="sub" style="margin-top:-4px;" id="sendNote">
               ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@majdoba.me</b> لتقوم بإرسالها.
@@ -597,7 +598,7 @@
 
   <div class="footer">
     <div><span id="lastUpdateLabel">آخر تحديث:</span> <span id="clock">—</span></div>
-    <div style="color:var(--blue); font-weight:1100;" id="footerDev">DEVELOPED BY: AHMAD MAJDOBA</div>
+    <div style="color:var(--blue); font-weight:800;" id="footerDev">DEVELOPED BY: AHMAD MAJDOBA</div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -938,412 +939,270 @@ function renderSections(){
         <div class="qRow">
           <div class="qText">${q.textKey[LANG]}</div>
           <div style="display:flex; gap:10px; align-items:center; ${document.body.classList.contains('rtl') ? 'flex-direction:row-reverse;' : 'flex-direction:row;'}">
-            <select id="ans_${q.id}" data-weight="${q.weight}">${buildOptions(q.weight)}</select>
-            <div class="w">${LANG === "ar" ? `الوزن ${q.weight}` : `Weight ${q.weight}`}</div>
+             <span class="w">(${q.weight})</span>
+             <select id="${q.id}" class="qSelect">
+                ${buildOptions(q.weight)}
+             </select>
           </div>
         </div>
       `;
       qList.appendChild(qEl);
     });
-
     mount.appendChild(section);
   });
-}
 
-function getAnswers(){
-  const data = {};
-  SECTIONS.forEach(sec => sec.questions.forEach(q => {
-    const el = document.getElementById(`ans_${q.id}`);
-    data[q.id] = (el && el.value !== "") ? Number(el.value) : null;
-  }));
-  return data;
+  // Re-attach event listeners to selectors
+  document.querySelectorAll(".qSelect").forEach(sel => {
+    sel.addEventListener("change", updateProgress);
+  });
 }
 
 function updateProgress(){
+  const selects = document.querySelectorAll(".qSelect");
   let answered = 0;
-  document.querySelectorAll('select[id^="ans_"]').forEach(sel => {
-    if (sel.value !== "") answered++;
-  });
-  const pct = totalQ ? (answered / totalQ) * 100 : 0;
-
-  const i = I18N[LANG];
-  progressText.textContent = answered === 0 ? i.progressNotStarted : i.progressText(answered, totalQ);
-  miniBar.style.width = `${clamp(pct,0,100)}%`;
-}
-
-/* ==========================
-   6) Summary + Recommendation
-   ========================== */
-function buildSummary(overallPctValue, sectionResults){
-  const i = I18N[LANG].summary;
-
-  const company = (document.getElementById("companyName").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-  const erp = (document.getElementById("erpName").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-  const date = (document.getElementById("assessDate").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-  const assessor = (document.getElementById("assessor").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-  const phone = (document.getElementById("phone").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-  const email = (document.getElementById("clientEmail").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
-
-  const lines = [];
-  lines.push(i.title);
-  lines.push("—");
-  lines.push(`${i.company}: ${company}`);
-  lines.push(`${i.erp}: ${erp}`);
-  lines.push(`${i.date}: ${date}`);
-  lines.push(`${i.assessor}: ${assessor}`);
-  lines.push(`${i.phone}: ${phone}`);
-  lines.push(`${i.email}: ${email}`);
-  lines.push("—");
-  lines.push(i.sectionResults);
-  sectionResults.forEach(s => lines.push(`- ${s.title}: ${s.pct}%`));
-  lines.push("—");
-  lines.push(`${i.overall}: ${Math.round(overallPctValue)}%`);
-  lines.push(`${i.contact}: www.majdoba.me`);
-  return lines.join("\n");
-}
-
-function weakestSection(sectionResults){
-  const filtered = sectionResults.filter(s => s.answeredMax > 0);
-  if (!filtered.length) return null;
-  filtered.sort((a,b)=>a.pct - b.pct);
-  return filtered[0];
-}
-
-function setRecommendation(overall, weak){
-  if (!weak){
-    recBox.classList.remove("show");
-    return;
+  selects.forEach(s => { if(s.value !== "") answered++; });
+  
+  if(answered === 0){
+    progressText.textContent = I18N[LANG].progressNotStarted;
+    miniBar.style.width = "0%";
+  } else {
+    progressText.textContent = I18N[LANG].progressText(answered, totalQ);
+    miniBar.style.width = `${(answered / totalQ) * 100}%`;
   }
-  const r = I18N[LANG].rec;
-  let pack;
-  if (overall < 70) pack = r.low(weak.title);
-  else if (overall < 85) pack = r.mid(weak.title);
-  else pack = r.high(weak.title);
-
-  recText.innerHTML = `${pack.h}<small>${pack.s}</small>`;
-  recBox.classList.add("show");
 }
 
 /* ==========================
-   7) Calculate
+   6) Initialization and Calculation logic
    ========================== */
-function calculate(){
-  const answers = getAnswers();
+function calculateResults(){
   let totalScore = 0;
-  let totalMax = 0;
-
-  const sectionResults = [];
+  let totalWeight = 0;
+  let answeredCount = 0;
+  
+  const sectionResults = {};
 
   SECTIONS.forEach(sec => {
     let secScore = 0;
-    let secMax = 0;
-
+    let secWeight = 0;
     sec.questions.forEach(q => {
-      const v = answers[q.id];
-      if (v !== null){
-        secScore += v;
-        secMax += q.weight;
+      const val = document.getElementById(q.id).value;
+      if(val !== "") {
+        secScore += parseInt(val);
+        answeredCount++;
       }
+      secWeight += q.weight;
     });
-
-    const pct = secMax > 0 ? (secScore / secMax) * 100 : 0;
-    const g = gradeFromPct(pct);
-
-    document.getElementById(`pct_${sec.id}`).textContent = `${Math.round(pct)}%`;
-    const ge = document.getElementById(`grade_${sec.id}`);
-    ge.textContent = g.label;
-    ge.style.color = g.color;
-
+    sectionResults[sec.id] = { score: secScore, weight: secWeight };
     totalScore += secScore;
-    totalMax += secMax;
-
-    sectionResults.push({
-      id: sec.id,
-      title: sec.titleKey[LANG],
-      pct: Math.round(pct),
-      answeredMax: secMax
-    });
+    totalWeight += secWeight;
   });
 
-  const overall = totalMax > 0 ? (totalScore / totalMax) * 100 : 0;
-  const og = gradeFromPct(overall);
-
-  overallPct.textContent = `${Math.round(overall)}%`;
-  overallGrade.textContent = og.label;
-  overallGrade.style.color = og.color;
-
-  const i = I18N[LANG];
-  overallBadge.textContent = totalMax > 0 ? i.badgeCalculated : i.badgeNoAnswers;
-  overallBadge.style.color = totalMax > 0 ? "var(--blue)" : "var(--muted)";
-  overallBar.style.width = `${clamp(overall,0,100)}%`;
-
-  const weak = weakestSection(sectionResults);
-  setRecommendation(overall, weak);
-
-  const summary = buildSummary(overall, sectionResults);
-  summaryText.value = summary;
-
-  shareBox.classList.add("show");
-
-  btnSend.classList.add("pulse");
-  setTimeout(()=>btnSend.classList.remove("pulse"), 3000);
-
-  toast(i.toast.calculated);
-}
-
-/* ==========================
-   8) Share/Copy/Send
-   ========================== */
-async function shareText(text){
-  const i = I18N[LANG].toast;
-  try{
-    if (navigator.share){
-      await navigator.share({ text });
-      toast(i.shareOpened);
-    } else {
-      await navigator.clipboard.writeText(text);
-      toast(i.shareFallback);
-    }
-  }catch(e){
-    try{
-      await navigator.clipboard.writeText(text);
-      toast(i.copyOk);
-    }catch(_){
-      toast(i.copyFail);
-    }
+  if(answeredCount === 0){
+    toast(I18N[LANG].toast.needCalc);
+    return;
   }
-}
 
-const DEST_EMAIL = "info@majdoba.me";
-function openMail(summary){
-  const mail = I18N[LANG].mail;
-  const subject = encodeURIComponent(mail.subject);
-  const body = encodeURIComponent(summary + "\n\n—\n" + mail.bodyFooter + "\nwww.majdoba.me");
-  const mailto = `mailto:${DEST_EMAIL}?subject=${subject}&body=${body}`;
-  window.location.href = mailto;
-}
-
-/* ==========================
-   9) Save/Load/Reset
-   ========================== */
-const STORAGE_KEY = "erp_assessment_bilingual_full_v1";
-
-function save(){
-  const payload = {
-    lang: LANG,
-    meta: {
-      companyName: document.getElementById("companyName").value || "",
-      erpName: document.getElementById("erpName").value || "",
-      assessDate: document.getElementById("assessDate").value || "",
-      assessor: document.getElementById("assessor").value || "",
-      phone: document.getElementById("phone").value || "",
-      clientEmail: document.getElementById("clientEmail").value || ""
-    },
-    answers: getAnswers()
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  toast(I18N[LANG].toast.saved);
-}
-
-function load(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw){ toast(I18N[LANG].toast.noSaved); return; }
-  const payload = JSON.parse(raw);
-
-  document.getElementById("companyName").value = payload.meta?.companyName || "";
-  document.getElementById("erpName").value = payload.meta?.erpName || "";
-  document.getElementById("assessDate").value = payload.meta?.assessDate || "";
-  document.getElementById("assessor").value = payload.meta?.assessor || "";
-  document.getElementById("phone").value = payload.meta?.phone || "";
-  document.getElementById("clientEmail").value = payload.meta?.clientEmail || "";
-
-  SECTIONS.forEach(sec => sec.questions.forEach(q => {
-    const el = document.getElementById(`ans_${q.id}`);
-    const v = payload.answers?.[q.id];
-    el.value = (v === null || v === undefined) ? "" : String(v);
-  }));
-
-  updateProgress();
-  calculate();
-  toast(I18N[LANG].toast.loaded);
-}
-
-function resetAll(){
-  if (!confirm(I18N[LANG].toast.confirmReset)) return;
-
-  ["companyName","erpName","assessDate","assessor","phone","clientEmail"].forEach(id=>{
-    document.getElementById(id).value = "";
-  });
+  // Update Section UIs
+  let lowestSec = null;
+  let lowestPct = 101;
 
   SECTIONS.forEach(sec => {
-    sec.questions.forEach(q => document.getElementById(`ans_${q.id}`).value = "");
-    document.getElementById(`pct_${sec.id}`).textContent = "—%";
-    const ge = document.getElementById(`grade_${sec.id}`);
-    ge.textContent = I18N[LANG].badgeNotCalculated;
-    ge.style.color = "var(--muted)";
+    const r = sectionResults[sec.id];
+    const pct = Math.round((r.score / r.weight) * 100) || 0;
+    document.getElementById(`pct_${sec.id}`).textContent = `${pct}%`;
+    
+    const gradeInfo = gradeFromPct(pct);
+    const labelEl = document.getElementById(`grade_${sec.id}`);
+    labelEl.textContent = gradeInfo.label;
+    labelEl.style.color = gradeInfo.color;
+
+    if(pct < lowestPct) {
+      lowestPct = pct;
+      lowestSec = sec;
+    }
   });
 
-  overallPct.textContent = "—%";
-  overallBadge.textContent = I18N[LANG].badgeNotCalculated;
-  overallBadge.style.color = "var(--muted)";
-  overallBar.style.width = "0%";
-  overallGrade.textContent = "—";
-  overallGrade.style.color = "var(--muted)";
+  // Update Overall UI
+  const overallPctVal = Math.round((totalScore / totalWeight) * 100) || 0;
+  overallPct.textContent = `${overallPctVal}%`;
+  overallBar.style.width = `${overallPctVal}%`;
+  
+  const overallGradeInfo = gradeFromPct(overallPctVal);
+  overallGrade.textContent = overallGradeInfo.label;
+  overallGrade.style.color = overallGradeInfo.color;
+  overallBadge.textContent = I18N[LANG].badgeCalculated;
 
+  // Recommendations box
+  let recData;
+  if(overallPctVal < 55) {
+    recData = I18N[LANG].rec.low(lowestSec.titleKey[LANG]);
+  } else if(overallPctVal < 85) {
+    recData = I18N[LANG].rec.mid(lowestSec.titleKey[LANG]);
+  } else {
+    recData = I18N[LANG].rec.high(lowestSec.titleKey[LANG]);
+  }
+  recText.innerHTML = `${recData.h}<small>${recData.s}</small>`;
+  recBox.classList.add("show");
+
+  // Build Summary Text Box
+  buildSummary(overallPctVal, overallGradeInfo.label, sectionResults);
+  shareBox.classList.add("show");
+  toast(I18N[LANG].toast.calculated);
+}
+
+function buildSummary(overallPctVal, overallGradeLabel, sectionResults){
+  const s = I18N[LANG].summary;
+  let txt = `=== ${s.title} ===\n`;
+  txt += `${s.company}: ${document.getElementById("companyName").value || "—"}\n`;
+  txt += `${s.erp}: ${document.getElementById("erpName").value || "—"}\n`;
+  txt += `${s.date}: ${document.getElementById("assessDate").value || "—"}\n`;
+  txt += `${s.assessor}: ${document.getElementById("assessor").value || "—"}\n\n`;
+  
+  txt += `${s.sectionResults}\n`;
+  SECTIONS.forEach(sec => {
+    const r = sectionResults[sec.id];
+    const pct = Math.round((r.score / r.weight) * 100) || 0;
+    txt += `- ${sec.titleKey[LANG]}: ${pct}%\n`;
+  });
+  
+  txt += `\n${s.overall}: ${overallPctVal}% (${overallGradeLabel})\n`;
+  txt += `${s.contact}: info@majdoba.me`;
+  summaryText.value = txt;
+}
+
+// Language Switch
+function switchLanguage(lang){
+  LANG = lang;
+  document.body.className = I18N[LANG].dir;
+  document.body.dir = I18N[LANG].dir;
+  
+  // Update static text elements
+  document.getElementById("appName").textContent = I18N[LANG].appName;
+  document.getElementById("appTagline").textContent = I18N[LANG].appTagline;
+  document.getElementById("heroTitle").textContent = I18N[LANG].heroTitle;
+  document.getElementById("devTextPrefix").textContent = I18N[LANG].devPrefix;
+  document.getElementById("devTextName").textContent = I18N[LANG].devName;
+  document.getElementById("heroHint").innerHTML = I18N[LANG].heroHint;
+  
+  document.getElementById("lblCompany").textContent = I18N[LANG].labels.company;
+  document.getElementById("companyName").placeholder = I18N[LANG].placeholders.company;
+  document.getElementById("lblERP").textContent = I18N[LANG].labels.erp;
+  document.getElementById("erpName").placeholder = I18N[LANG].placeholders.erp;
+  document.getElementById("lblDate").textContent = I18N[LANG].labels.date;
+  document.getElementById("lblAssessor").textContent = I18N[LANG].labels.assessor;
+  document.getElementById("assessor").placeholder = I18N[LANG].placeholders.assessor;
+  document.getElementById("lblPhone").textContent = I18N[LANG].labels.phone;
+  document.getElementById("phone").placeholder = I18N[LANG].placeholders.phone;
+  document.getElementById("lblEmail").textContent = I18N[LANG].labels.email;
+  document.getElementById("clientEmail").placeholder = I18N[LANG].placeholders.email;
+
+  document.getElementById("btnReset").textContent = I18N[LANG].buttons.reset;
+  document.getElementById("btnSave").textContent = I18N[LANG].buttons.save;
+  document.getElementById("btnLoad").textContent = I18N[LANG].buttons.load;
+  document.getElementById("btnCalculate").textContent = I18N[LANG].buttons.calculate;
+  document.getElementById("btnCopy").textContent = I18N[LANG].buttons.copy;
+  document.getElementById("btnShare").textContent = I18N[LANG].buttons.share;
+  document.getElementById("btnSend").textContent = I18N[LANG].buttons.send;
+
+  document.getElementById("overallTitle").textContent = I18N[LANG].overallTitle;
+  document.getElementById("overallBadge").textContent = I18N[LANG].badgeNotCalculated;
+  document.getElementById("shareTitle").childNodes[0].textContent = I18N[LANG].shareTitle + " ";
+  document.getElementById("shareSubtitle").textContent = I18N[LANG].shareSubtitle;
+  document.getElementById("sendNote").innerHTML = I18N[LANG].sendNote;
+  document.getElementById("formulaNote").textContent = I18N[LANG].formulaNote;
+  document.getElementById("lastUpdateLabel").textContent = I18N[LANG].lastUpdate;
+
+  langAR.classList.toggle("active", lang === "ar");
+  langEN.classList.toggle("active", lang === "en");
+
+  // Re-render sections
+  renderSections();
+  updateProgress();
+  
+  // Hide results box until calculated again
   recBox.classList.remove("show");
   shareBox.classList.remove("show");
-  summaryText.value = "";
-
-  updateProgress();
-  toast(I18N[LANG].toast.resetDone);
+  overallPct.textContent = "—%";
+  overallGrade.textContent = "—";
+  overallBar.style.width = "0%";
 }
 
-/* ==========================
-   10) Apply language to static UI
-   ========================== */
-function applyLanguage(lang){
-  LANG = lang;
-  const t = I18N[LANG];
-
-  document.documentElement.lang = LANG;
-  document.documentElement.dir = t.dir;
-
-  document.body.classList.toggle("rtl", t.dir === "rtl");
-  document.body.classList.toggle("ltr", t.dir === "ltr");
-
-  // header texts
-  document.getElementById("appName").textContent = t.appName;
-  document.getElementById("appTagline").textContent = t.appTagline;
-
-  // hero texts
-  document.getElementById("heroTitle").textContent = t.heroTitle;
-  document.getElementById("devTextPrefix").textContent = t.devPrefix;
-  document.getElementById("devTextName").textContent = t.devName;
-  document.getElementById("heroHint").innerHTML = t.heroHint;
-
-  // labels
-  document.getElementById("lblCompany").textContent = t.labels.company;
-  document.getElementById("lblERP").textContent = t.labels.erp;
-  document.getElementById("lblDate").textContent = t.labels.date;
-  document.getElementById("lblAssessor").textContent = t.labels.assessor;
-  document.getElementById("lblPhone").textContent = t.labels.phone;
-  document.getElementById("lblEmail").textContent = t.labels.email;
-
-  // placeholders
-  document.getElementById("companyName").placeholder = t.placeholders.company;
-  document.getElementById("erpName").placeholder = t.placeholders.erp;
-  document.getElementById("assessor").placeholder = t.placeholders.assessor;
-  document.getElementById("phone").placeholder = t.placeholders.phone;
-  document.getElementById("clientEmail").placeholder = t.placeholders.email;
-
-  // buttons
-  btnReset.textContent = t.buttons.reset;
-  btnSave.textContent = t.buttons.save;
-  btnLoad.textContent = t.buttons.load;
-  btnCalculate.textContent = t.buttons.calculate;
-
-  btnCopy.textContent = t.buttons.copy;
-  btnShare.textContent = t.buttons.share;
-  btnSend.textContent = t.buttons.send;
-
-  // overall
-  document.getElementById("overallTitle").textContent = t.overallTitle;
-
-  // share texts
-  document.getElementById("shareTitle").childNodes[0].textContent = t.shareTitle + "\n";
-  document.getElementById("shareSubtitle").textContent = t.shareSubtitle;
-  document.getElementById("sendNote").innerHTML = t.sendNote;
-
-  // formula + footer
-  document.getElementById("formulaNote").textContent = t.formulaNote;
-  document.getElementById("lastUpdateLabel").textContent = t.lastUpdate;
-
-  // language toggle UI
-  langAR.classList.toggle("active", LANG === "ar");
-  langEN.classList.toggle("active", LANG === "en");
-
-  // rerender sections in current language while preserving answers
-  const savedAnswers = getAnswers();
-  renderSections();
-  // restore answers
-  SECTIONS.forEach(sec => sec.questions.forEach(q => {
-    const el = document.getElementById(`ans_${q.id}`);
-    const v = savedAnswers[q.id];
-    el.value = (v === null || v === undefined) ? "" : String(v);
-  }));
-
-  updateProgress();
-
-  // reset calculated labels to "not calculated" if shareBox hidden
-  if (!shareBox.classList.contains("show")){
-    overallBadge.textContent = t.badgeNotCalculated;
-  }
-}
-
-/* ==========================
-   11) Clock
-   ========================== */
-function tick(){
+// Clock 
+setInterval(() => {
   const d = new Date();
-  document.getElementById("clock").textContent =
-    `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-setInterval(tick, 1000);
-tick();
+  document.getElementById("clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}, 1000);
 
-(function initDate(){
-  const el = document.getElementById("assessDate");
-  if (!el.value){
-    const d = new Date();
-    el.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  }
-})();
-
-/* ==========================
-   12) Events
-   ========================== */
-langAR.addEventListener("click", () => applyLanguage("ar"));
-langEN.addEventListener("click", () => applyLanguage("en"));
-
-btnCalculate.addEventListener("click", calculate);
-btnSave.addEventListener("click", save);
-btnLoad.addEventListener("click", load);
-btnReset.addEventListener("click", resetAll);
-
-btnCopy.addEventListener("click", async () => {
-  const text = summaryText.value.trim();
-  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
-  try{
-    await navigator.clipboard.writeText(text);
-    toast(I18N[LANG].toast.copyOk);
-  }catch(e){
-    toast(I18N[LANG].toast.copyFail);
+// Basic Actions
+btnReset.addEventListener("click", () => {
+  if(confirm(I18N[LANG].toast.confirmReset)){
+    document.querySelectorAll(".qSelect").forEach(s => s.value = "");
+    updateProgress();
+    recBox.classList.remove("show");
+    shareBox.classList.remove("show");
+    overallPct.textContent = "—%";
+    overallGrade.textContent = "—";
+    overallBar.style.width = "0%";
+    overallBadge.textContent = I18N[LANG].badgeNotCalculated;
+    toast(I18N[LANG].toast.resetDone);
   }
 });
 
-btnShare.addEventListener("click", async () => {
-  const text = summaryText.value.trim();
-  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
-  await shareText(text);
+btnSave.addEventListener("click", () => {
+  const data = {};
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      data[q.id] = document.getElementById(q.id).value;
+    });
+  });
+  localStorage.setItem("erp_assess_data", JSON.stringify(data));
+  toast(I18N[LANG].toast.saved);
+});
+
+btnLoad.addEventListener("click", () => {
+  const local = localStorage.getItem("erp_assess_data");
+  if(!local){
+    toast(I18N[LANG].toast.noSaved);
+    return;
+  }
+  const data = JSON.parse(local);
+  Object.keys(data).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = data[id];
+  });
+  updateProgress();
+  toast(I18N[LANG].toast.loaded);
+});
+
+btnCopy.addEventListener("click", () => {
+  navigator.clipboard.writeText(summaryText.value)
+    .then(() => toast(I18N[LANG].toast.copyOk))
+    .catch(() => toast(I18N[LANG].toast.copyFail));
+});
+
+btnShare.addEventListener("click", () => {
+  if (navigator.share) {
+    navigator.share({ title: I18N[LANG].summary.title, text: summaryText.value })
+      .then(() => toast(I18N[LANG].toast.shareOpened))
+      .catch(() => {});
+  } else {
+    navigator.clipboard.writeText(summaryText.value);
+    toast(I18N[LANG].toast.shareFallback);
+  }
 });
 
 btnSend.addEventListener("click", () => {
-  const text = summaryText.value.trim();
-  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
-  openMail(text);
+  const sub = encodeURIComponent(I18N[LANG].mail.subject);
+  const body = encodeURIComponent(summaryText.value + "\n\n" + I18N[LANG].mail.bodyFooter);
+  window.open(`mailto:info@majdoba.me?subject=${sub}&body=${body}`, "_self");
 });
 
-// update progress on any select change
-document.addEventListener("change", (e) => {
-  if (e.target && e.target.matches('select[id^="ans_"]')) updateProgress();
-});
+btnCalculate.addEventListener("click", calculateResults);
+langAR.addEventListener("click", () => switchLanguage("ar"));
+langEN.addEventListener("click", () => switchLanguage("en"));
 
-/* ==========================
-   13) Init
-   ========================== */
-renderSections();
-applyLanguage("ar");
-updateProgress();
+// Initialize view
+switchLanguage("ar");
 </script>
 </body>
 </html>
