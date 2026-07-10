@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ERP Assessment Tool</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- One font for both languages -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue:#0070C0;
+      --green:#28A745;
+      --ink:#12202f;
+      --muted:#6b7a8a;
+      --line:rgba(17,32,47,.10);
+      --shadow: 0 16px 42px rgba(18,32,47,.10);
+      --radius: 18px;
+      --focus: rgba(0,112,192,.18);
+      --bg:
+        radial-gradient(1200px 600px at 15% 5%, rgba(0,112,192,.10), transparent 60%),
+        radial-gradient(900px 500px at 85% 10%, rgba(40,167,69,.10), transparent 60%),
+        linear-gradient(180deg, #f6fbff, #f8fff9);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:'Noto Kufi Arabic',system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    body.rtl{ direction: rtl; text-align: right; }
+    body.ltr{ direction: ltr; text-align: left; }
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap{
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .mark{
+      width:38px;height:38px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(0,112,192,.18), rgba(40,167,69,.18));
+      border:1px solid rgba(0,112,192,.14);
+      position:relative; overflow:hidden;
+    }
+    .mark::before{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+      transform: translateX(-120%);
+      animation: sweep 2.6s linear infinite;
+    }
+    @keyframes sweep{ 0%{transform:translateX(-120%)} 100%{transform:translateX(120%)} }
+
+    .brand h1{ margin:0; font-size: 14px; font-weight: 900; color: var(--blue); }
+    .brand small{ display:block; margin-top:2px; color: var(--muted); font-size: 12px; font-weight: 700; }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    .btn{
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 900;
+      font-size: 12px;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      font-family:'Noto Kufi Arabic',sans-serif;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 12px 26px rgba(18,32,47,.10);
+      color: var(--ink);
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 36px rgba(18,32,47,.14); }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--blue), #0b86e6);
+      color:#fff;
+      box-shadow: 0 14px 30px rgba(0,112,192,.22);
+    }
+    .btn-green{
+      background: linear-gradient(135deg, var(--green), #34c759);
+      color:#fff;
+      box-shadow: 0 14px 30px rgba(40,167,69,.20);
+    }
+
+    /* Language toggle */
+    .langToggle{
+      display:flex; gap:8px; padding:6px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 10px 22px rgba(18,32,47,.08);
+    }
+    .langChip{
+      border:1px solid transparent;
+      border-radius: 12px;
+      padding:8px 10px;
+      font-weight: 1000;
+      font-size: 12px;
+      cursor:pointer;
+      background: rgba(255,255,255,.9);
+      color: var(--ink);
+      transition: transform .18s ease, box-shadow .18s ease;
+      user-select:none;
+      font-family:'Noto Kufi Arabic',sans-serif;
+    }
+    .langChip.active{
+      background: linear-gradient(135deg, rgba(0,112,192,.12), rgba(40,167,69,.12));
+      border-color: rgba(0,112,192,.20);
+      box-shadow: 0 0 0 4px rgba(0,112,192,.12);
+    }
+
+    .container{
+      max-width:1150px;
+      margin: 0 auto;
+      padding: 20px 18px 60px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media(max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      background: rgba(255,255,255,.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .pad{ padding: 18px; }
+
+    .hero::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      width:100%; height:5px;
+      background: linear-gradient(90deg, var(--blue), var(--green), var(--blue));
+      background-size: 200% 100%;
+      animation: sheen 3.6s linear infinite;
+    }
+    @keyframes sheen{ 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+
+    .title{ margin: 10px 0 6px; font-size: 20px; font-weight: 1000; line-height: 1.9; }
+    .devLink{
+      display:inline-flex; align-items:center; gap:10px;
+      margin: 4px 0 12px;
+      padding: 9px 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,112,192,.08), rgba(40,167,69,.08));
+      border: 1px solid rgba(0,112,192,.12);
+      text-decoration:none;
+      color: var(--ink);
+      font-weight: 900;
+      font-size: 12px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .devLink:hover{ transform: translateY(-1px); box-shadow: 0 14px 34px rgba(18,32,47,.12); }
+    .dot{ width:10px;height:10px;border-radius:999px; background: linear-gradient(135deg, var(--blue), var(--green)); }
+    .devLink span{ color: var(--blue); font-weight: 1000; }
+
+    .sub{ margin:0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 2; }
+
+    /* Progress */
+    .progressBox{
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .progressText{
+      font-size: 12px;
+      font-weight: 1000;
+      color: var(--ink);
+    }
+    .miniBarWrap{
+      flex: 1 1 240px;
+      background: rgba(0,112,192,.08);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      overflow:hidden;
+      min-width: 220px;
+    }
+    .miniBar{
+      height: 10px;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .25s ease;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+      margin-top: 14px;
+    }
+    @media(max-width:520px){ .meta{ grid-template-columns:1fr; } }
+
+    .field{
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    .field:focus-within{ box-shadow: 0 0 0 4px var(--focus); }
+    .field label{
+      display:block;
+      font-size: 11px;
+      font-weight: 1000;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field input{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      font-weight: 900;
+      font-size: 13px;
+      font-family:'Noto Kufi Arabic',sans-serif;
+      color: var(--ink);
+    }
+    body.rtl .field input{ text-align:right; }
+    body.ltr .field input{ text-align:left; }
+
+    /* Score */
+    .score::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      width:100%; height:5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+    .scoreTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      color: var(--blue);
+      font-weight: 1000;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+
+    .big{
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      margin-top: 10px;
+    }
+    body.rtl .big{ flex-direction: row-reverse; }
+    body.ltr .big{ flex-direction: row; }
+
+    .pct{ font-size: 40px; font-weight: 1100; line-height:1; }
+    .grade{ font-size: 13px; font-weight: 1100; padding-bottom: 6px; color: var(--muted); }
+
+    .barWrap{
+      margin-top: 12px;
+      background: rgba(0,112,192,.08);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      overflow:hidden;
+    }
+    .bar{
+      height: 12px;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .35s ease;
+    }
+
+    .box{
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      padding: 12px;
+      display:none;
+      gap:10px;
+      flex-direction:column;
+    }
+    .box.show{ display:flex; }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .boxTitle{
+      font-size: 12px;
+      font-weight: 1100;
+      color: var(--ink);
+      line-height: 1.9;
+    }
+    .boxTitle small{
+      display:block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .btnGroup{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* Sections */
+    .section{ margin-top: 16px; transition: transform .18s ease, box-shadow .18s ease; }
+    .section:hover{ transform: translateY(-2px); box-shadow: 0 16px 44px rgba(18,32,47,.14); }
+
+    .sectionHead{
+      padding: 16px 16px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      position:relative;
+    }
+    .sectionHead::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      height:4px; width:100%;
+      background: var(--blue);
+    }
+    .section[data-accent="green"] .sectionHead::before{ background: var(--green); }
+
+    .sectionTitle{ margin:0; font-size: 14px; font-weight: 1100; }
+    .sectionScore{ min-width: 160px; }
+    body.rtl .sectionScore{ text-align:left; }
+    body.ltr .sectionScore{ text-align:right; }
+
+    .sectionPct{ font-weight: 1100; font-size: 18px; line-height:1.1; }
+    .sectionLabel{ font-size: 11px; font-weight: 1000; color: var(--muted); margin-top: 4px; }
+
+    .qList{ padding: 0 16px 16px; display:grid; gap:10px; }
+    .q{
+      background: rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .q::before{
+      content:"";
+      position:absolute; inset-inline-start:0; top:0;
+      width:6px; height:100%;
+      background: rgba(0,112,192,.14);
+    }
+    .section[data-accent="green"] .q::before{ background: rgba(40,167,69,.14); }
+
+    .qRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .qText{
+      font-weight: 900;
+      font-size: 13px;
+      line-height: 2;
+      flex: 1 1 520px;
+      min-width: 220px;
+    }
+
+    .w{
+      font-size: 12px;
+      font-weight: 1100;
+      color: var(--green);
+      white-space:nowrap;
+    }
+
+    select{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.97);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 9px 10px;
+      font-weight: 1000;
+      font-size: 12px;
+      outline:none;
+      cursor:pointer;
+      min-width: 120px;
+      font-family:'Noto Kufi Arabic',sans-serif;
+      text-align: center;
+      transition: box-shadow .18s ease;
+    }
+    select:focus{ box-shadow: 0 0 0 4px var(--focus); }
+
+    .footer{
+      max-width:1150px;
+      margin: 0 auto;
+      padding: 0 18px 30px;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .toast{
+      position: fixed;
+      inset-inline-start: 14px;
+      bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(18,32,47,.92);
+      color:#fff;
+      font-weight: 1000;
+      font-size: 12px;
+      box-shadow: 0 16px 42px rgba(0,0,0,.22);
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 999;
+      pointer-events:none;
+      max-width: 92vw;
+    }
+    .toast.show{ opacity:1; transform: translateY(0); }
+
+    .pulse{ animation: pulse 1.2s ease-in-out infinite; }
+    @keyframes pulse{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-1px); } }
+  </style>
+</head>
+
+<body class="rtl">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1 id="appName">أداة التقييم الفني لنظام ERP</h1>
+          <small id="appTagline">أداة مجانية مبسطة لقياس الوضع العام</small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="langToggle" aria-label="Language toggle">
+          <button class="langChip active" id="langAR" type="button">AR</button>
+          <button class="langChip" id="langEN" type="button">EN</button>
+        </div>
+
+        <button class="btn" id="btnReset" type="button">إعادة ضبط</button>
+        <button class="btn" id="btnSave" type="button">حفظ</button>
+        <button class="btn" id="btnLoad" type="button">تحميل</button>
+        <button class="btn btn-primary" id="btnCalculate" type="button">احتساب النتائج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <div class="card hero">
+        <div class="pad">
+          <div class="title" id="heroTitle">التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك</div>
+
+          <a class="devLink" href="https://www.majdoba.me" target="_blank" rel="noopener noreferrer" id="devLink">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="devTextPrefix">مطور بواسطة</span>
+            <span id="devTextName">أحمد المجدوبة للاستشارات التقنية</span>
+          </a>
+
+          <p class="sub" id="heroHint">
+            اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.
+          </p>
+
+          <div class="progressBox">
+            <div class="progressText" id="progressText">لم تبدأ بعد</div>
+            <div class="miniBarWrap" aria-label="Progress bar">
+              <div class="miniBar" id="miniBar"></div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="field">
+              <label id="lblCompany">اسم الشركة / العميل</label>
+              <input id="companyName" type="text" placeholder="مثال: شركة ABC" />
+            </div>
+            <div class="field">
+              <label id="lblERP">اسم نظام ERP</label>
+              <input id="erpName" type="text" placeholder="مثال: Odoo / SAP / Dynamics" />
+            </div>
+            <div class="field">
+              <label id="lblDate">تاريخ التقييم</label>
+              <input id="assessDate" type="date" />
+            </div>
+            <div class="field">
+              <label id="lblAssessor">اسم المُقيّم</label>
+              <input id="assessor" type="text" placeholder="مثال: أحمد المجدوبة" />
+            </div>
+            <div class="field">
+              <label id="lblPhone">رقم الهاتف</label>
+              <input id="phone" type="tel" placeholder="مثال: 079xxxxxxx" />
+            </div>
+            <div class="field">
+              <label id="lblEmail">البريد الإلكتروني</label>
+              <input id="clientEmail" type="email" placeholder="example@company.com" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card score">
+        <div class="pad">
+          <div class="scoreTop">
+            <div style="font-weight:1100;" id="overallTitle">النتيجة الإجمالية</div>
+            <div class="badge" id="overallBadge">لم يتم الاحتساب</div>
+          </div>
+
+          <div class="big">
+            <div class="pct" id="overallPct">—%</div>
+            <div class="grade" id="overallGrade">—</div>
+          </div>
+
+          <div class="barWrap">
+            <div class="bar" id="overallBar"></div>
+          </div>
+
+          <div class="box" id="recBox">
+            <div class="boxTitle" id="recText">—<small>—</small></div>
+          </div>
+
+          <div class="box" id="shareBox">
+            <div class="row">
+              <div class="boxTitle" id="shareTitle">
+                ملخص سريع جاهز للمشاركة
+                <small id="shareSubtitle">انسخ الملخص أو شاركه مباشرة</small>
+              </div>
+              <div class="btnGroup">
+                <button class="btn" id="btnCopy" type="button">نسخ الملخص</button>
+                <button class="btn" id="btnShare" type="button">مشاركة</button>
+                <button class="btn btn-green" id="btnSend" type="button">إرسال التقرير</button>
+              </div>
+            </div>
+
+            <textarea id="summaryText" readonly
+              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Noto Kufi Arabic',sans-serif; font-weight:800; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
+
+            <div class="sub" style="margin-top:-4px;" id="sendNote">
+              ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@majdoba.me</b> لتقوم بإرسالها.
+            </div>
+          </div>
+
+          <p class="sub" style="margin-top:12px;" id="formulaNote">
+            (النتيجة = مجموع الدرجات ÷ مجموع الأوزان) × 100
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="sectionsMount"></div>
+  </div>
+
+  <div class="footer">
+    <div><span id="lastUpdateLabel">آخر تحديث:</span> <span id="clock">—</span></div>
+    <div style="color:var(--blue); font-weight:1100;" id="footerDev">DEVELOPED BY: AHMAD MAJDOBA</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ==========================
+   1) i18n dictionary
+   ========================== */
+const I18N = {
+  ar: {
+    dir: "rtl",
+    appName: "أداة التقييم الفني لنظام ERP",
+    appTagline: "أداة مجانية مبسطة لقياس الوضع العام",
+    heroTitle: "التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك",
+    devPrefix: "مطور بواسطة",
+    devName: "أحمد المجدوبة للاستشارات التقنية",
+    heroHint: 'اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.',
+    progressNotStarted: "لم تبدأ بعد",
+    progressText: (a,t) => `أجبت على ${a} من ${t} سؤال`,
+    labels: {
+      company: "اسم الشركة / العميل",
+      erp: "اسم نظام ERP",
+      date: "تاريخ التقييم",
+      assessor: "اسم المُقيّم",
+      phone: "رقم الهاتف",
+      email: "البريد الإلكتروني"
+    },
+    placeholders: {
+      company: "مثال: شركة ABC",
+      erp: "مثال: Odoo / SAP / Dynamics",
+      assessor: "مثال: أحمد المجدوبة",
+      phone: "مثال: 079xxxxxxx",
+      email: "example@company.com"
+    },
+    buttons: {
+      reset: "إعادة ضبط",
+      save: "حفظ",
+      load: "تحميل",
+      calculate: "احتساب النتائج",
+      copy: "نسخ الملخص",
+      share: "مشاركة",
+      send: "إرسال التقرير"
+    },
+    overallTitle: "النتيجة الإجمالية",
+    badgeNotCalculated: "لم يتم الاحتساب",
+    badgeCalculated: "تم الاحتساب",
+    badgeNoAnswers: "لا توجد إجابات بعد",
+    formulaNote: "(النتيجة = مجموع الدرجات ÷ مجموع الأوزان) × 100",
+    shareTitle: "ملخص سريع جاهز للمشاركة",
+    shareSubtitle: "انسخ الملخص أو شاركه مباشرة",
+    sendNote: 'ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@majdoba.me</b> لتقوم بإرسالها.',
+    lastUpdate: "آخر تحديث:",
+    grades: {
+      excellent: "ممتاز",
+      veryGood: "جيد جدًا",
+      ok: "مقبول",
+      needs: "يحتاج تحسين"
+    },
+    rec: {
+      low: (secTitle) => ({h:`أقوى فرصة للتحسين عندكم: ${secTitle}`, s:"ننصح بخطوات سريعة ومرتبة لتحسين هذا القسم خلال وقت قصير."}),
+      mid: (secTitle) => ({h:`النتيجة جيدة — والأفضلية للتحسين في: ${secTitle}`, s:"تحسين بسيط هنا غالبًا يرفع النتيجة الإجمالية بسرعة."}),
+      high:(secTitle) => ({h:`ممتاز — إذا رغبت بالتطوير، ابدأ بـ: ${secTitle}`, s:"حتى الأنظمة القوية يمكن تحسينها بالأتمتة والربط والتقارير."})
+    },
+    summary: {
+      title: "ملخص تقييم ERP (أداة مجانية)",
+      company: "الشركة",
+      erp: "نظام ERP",
+      date: "التاريخ",
+      assessor: "المُقيّم",
+      phone: "الهاتف",
+      email: "البريد",
+      sectionResults: "نتائج الأقسام:",
+      overall: "النتيجة الإجمالية",
+      contact: "للتواصل"
+    },
+    toast: {
+      calculated: "تم احتساب النتائج.",
+      saved: "تم الحفظ.",
+      loaded: "تم التحميل.",
+      noSaved: "لا توجد بيانات محفوظة.",
+      resetDone: "تمت إعادة الضبط.",
+      copyOk: "تم نسخ الملخص.",
+      copyFail: "تعذر النسخ على هذا المتصفح.",
+      shareOpened: "تم فتح المشاركة.",
+      shareFallback: "تم نسخ الملخص (المشاركة غير مدعومة على هذا الجهاز).",
+      needCalc: "قم بالاحتساب أولاً.",
+      confirmReset: "هل تريد إعادة ضبط جميع الإجابات؟"
+    },
+    mail: {
+      subject: "تقرير تقييم ERP (أداة مجانية)",
+      bodyFooter: "مرسل من أداة Majdoba"
+    },
+    optionDash: "—"
+  },
+  en: {
+    dir: "ltr",
+    appName: "ERP Technical Assessment Tool",
+    appTagline: "A free, simplified tool for a quick overview",
+    heroTitle: "Technical Assessment of Your ERP System",
+    devPrefix: "Developed by",
+    devName: "Ahmad Majdoba Technical Consulting",
+    heroHint: 'Choose a number for each question (1 up to the question weight), then click <b>Calculate Results</b>.',
+    progressNotStarted: "Not started yet",
+    progressText: (a,t) => `Answered ${a} of ${t} questions`,
+    labels: {
+      company: "Company / Client Name",
+      erp: "ERP System Name",
+      date: "Assessment Date",
+      assessor: "Assessor Name",
+      phone: "Phone Number",
+      email: "Email Address"
+    },
+    placeholders: {
+      company: "e.g., ABC Company",
+      erp: "e.g., Odoo / SAP / Dynamics",
+      assessor: "e.g., Ahmad Majdoba",
+      phone: "e.g., +962 79xxxxxxx",
+      email: "example@company.com"
+    },
+    buttons: {
+      reset: "Reset",
+      save: "Save",
+      load: "Load",
+      calculate: "Calculate Results",
+      copy: "Copy Summary",
+      share: "Share",
+      send: "Send Report"
+    },
+    overallTitle: "Overall Score",
+    badgeNotCalculated: "Not calculated",
+    badgeCalculated: "Calculated",
+    badgeNoAnswers: "No answers yet",
+    formulaNote: "(Score = Total Points ÷ Total Weights) × 100",
+    shareTitle: "Quick summary ready to share",
+    shareSubtitle: "Copy the summary or share it directly",
+    sendNote: 'Note: “Send Report” opens a prefilled email to <b>info@majdoba.me</b> for you to send.',
+    lastUpdate: "Last update:",
+    grades: {
+      excellent: "Excellent",
+      veryGood: "Very Good",
+      ok: "OK",
+      needs: "Needs Improvement"
+    },
+    rec: {
+      low: (secTitle) => ({h:`Top improvement opportunity: ${secTitle}`, s:"We recommend quick, structured steps to improve this area."}),
+      mid: (secTitle) => ({h:`Good result — best area to improve: ${secTitle}`, s:"A small improvement here can lift the overall score fast."}),
+      high:(secTitle) => ({h:`Excellent — if you want to optimize, start with: ${secTitle}`, s:"Even strong systems can improve through automation, integrations, and reporting."})
+    },
+    summary: {
+      title: "ERP Assessment Summary (Free Tool)",
+      company: "Company",
+      erp: "ERP",
+      date: "Date",
+      assessor: "Assessor",
+      phone: "Phone",
+      email: "Email",
+      sectionResults: "Section results:",
+      overall: "Overall score",
+      contact: "Contact"
+    },
+    toast: {
+      calculated: "Results calculated.",
+      saved: "Saved.",
+      loaded: "Loaded.",
+      noSaved: "No saved data found.",
+      resetDone: "Reset done.",
+      copyOk: "Summary copied.",
+      copyFail: "Copy failed on this browser.",
+      shareOpened: "Share opened.",
+      shareFallback: "Summary copied (share not supported on this device).",
+      needCalc: "Please calculate first.",
+      confirmReset: "Reset all answers?"
+    },
+    mail: {
+      subject: "ERP Assessment Report (Free Tool)",
+      bodyFooter: "Sent from Majdoba tool"
+    },
+    optionDash: "—"
+  }
+};
+
+let LANG = "ar";
+
+/* ==========================
+   2) Content model with keys
+   ========================== */
+const SECTIONS = [
+  {
+    id: "governance",
+    titleKey: { ar:"1) الحوكمة والضوابط", en:"1) Governance & Controls" },
+    accent: "blue",
+    questions: [
+      { id:"gov_q1", textKey:{ar:"وضوح المسؤوليات والصلاحيات في النظام.", en:"Clear roles and permissions in the system."}, weight: 8 },
+      { id:"gov_q2", textKey:{ar:"مراجعة الصلاحيات بشكل دوري.", en:"Periodic review of user access."}, weight: 10 },
+      { id:"gov_q3", textKey:{ar:"فصل المهام (من ينشئ ومن يعتمد).", en:"Segregation of duties (create vs approve)."}, weight: 10 },
+      { id:"gov_q4", textKey:{ar:"توفر سجل تتبع للعمليات (Audit).", en:"Audit trail is available and usable."}, weight: 8 },
+      { id:"gov_q5", textKey:{ar:"إدارة تغييرات النظام بشكل منظم.", en:"System changes are managed in an organized way."}, weight: 7 }
+    ]
+  },
+  {
+    id: "finance",
+    titleKey: { ar:"2) الجانب المالي والمحاسبي", en:"2) Finance & Accounting" },
+    accent: "green",
+    questions: [
+      { id:"fin_q1", textKey:{ar:"ملاءمة شجرة الحسابات لطبيعة عملكم.", en:"Chart of accounts fits your business."}, weight: 9 },
+      { id:"fin_q2", textKey:{ar:"إعدادات الضريبة صحيحة وسهلة.", en:"Tax setup is correct and easy."}, weight: 9 },
+      { id:"fin_q3", textKey:{ar:"إقفال الفترات المالية واضح ومنظم.", en:"Period closing is clear and controlled."}, weight: 8 },
+      { id:"fin_q4", textKey:{ar:"سهولة المطابقة البنكية.", en:"Bank reconciliation is straightforward."}, weight: 7 },
+      { id:"fin_q5", textKey:{ar:"دقة التقارير المالية.", en:"Financial reports are accurate."}, weight: 10 }
+    ]
+  },
+  {
+    id: "operations",
+    titleKey: { ar:"3) العمليات (مبيعات/مشتريات/مخزون)", en:"3) Operations (Sales/Purchase/Inventory)" },
+    accent: "blue",
+    questions: [
+      { id:"ops_q1", textKey:{ar:"تغطية دورة المبيعات بشكل واضح.", en:"Sales cycle is covered clearly."}, weight: 8 },
+      { id:"ops_q2", textKey:{ar:"تغطية دورة المشتريات بشكل واضح.", en:"Purchase cycle is covered clearly."}, weight: 8 },
+      { id:"ops_q3", textKey:{ar:"دقة بيانات المخزون.", en:"Inventory data is accurate."}, weight: 10 },
+      { id:"ops_q4", textKey:{ar:"تنظيم بيانات العملاء/الموردين/الأصناف.", en:"Master data (customers/vendors/items) is well organized."}, weight: 7 },
+      { id:"ops_q5", textKey:{ar:"التعامل السهل مع المرتجعات.", en:"Returns handling is easy."}, weight: 6 }
+    ]
+  },
+  {
+    id: "tech",
+    titleKey: { ar:"4) التقنية والأمان", en:"4) Technology & Security" },
+    accent: "green",
+    questions: [
+      { id:"tech_q1", textKey:{ar:"النسخ الاحتياطي موجود ويتم الاعتماد عليه.", en:"Backups exist and are reliable."}, weight: 10 },
+      { id:"tech_q2", textKey:{ar:"استقرار النظام وسرعته.", en:"System stability and speed."}, weight: 8 },
+      { id:"tech_q3", textKey:{ar:"أمان الدخول والصلاحيات.", en:"Authentication & access security."}, weight: 10 },
+      { id:"tech_q4", textKey:{ar:"سهولة التكامل/الربط عند الحاجة.", en:"Integrations are feasible when needed."}, weight: 7 }
+    ]
+  },
+  {
+    id: "people",
+    titleKey: { ar:"5) الفريق والاستخدام", en:"5) People & Adoption" },
+    accent: "blue",
+    questions: [
+      { id:"ppl_q1", textKey:{ar:"سهولة تدريب المستخدمين.", en:"User training is easy."}, weight: 8 },
+      { id:"ppl_q2", textKey:{ar:"وجود إجراءات عمل واضحة.", en:"Clear operating procedures exist."}, weight: 8 },
+      { id:"ppl_q3", textKey:{ar:"توفر دعم فني أو شخص مسؤول.", en:"Support or an owner is available."}, weight: 7 },
+      { id:"ppl_q4", textKey:{ar:"استخدام تقارير ولوحات متابعة.", en:"Reports and dashboards are used."}, weight: 6 }
+    ]
+  }
+];
+
+/* ==========================
+   3) UI refs
+   ========================== */
+const mount = document.getElementById("sectionsMount");
+const progressText = document.getElementById("progressText");
+const miniBar = document.getElementById("miniBar");
+
+const langAR = document.getElementById("langAR");
+const langEN = document.getElementById("langEN");
+
+const btnReset = document.getElementById("btnReset");
+const btnSave = document.getElementById("btnSave");
+const btnLoad = document.getElementById("btnLoad");
+const btnCalculate = document.getElementById("btnCalculate");
+
+const btnCopy = document.getElementById("btnCopy");
+const btnShare = document.getElementById("btnShare");
+const btnSend = document.getElementById("btnSend");
+
+const overallBadge = document.getElementById("overallBadge");
+const overallPct = document.getElementById("overallPct");
+const overallGrade = document.getElementById("overallGrade");
+const overallBar = document.getElementById("overallBar");
+
+const recBox = document.getElementById("recBox");
+const recText = document.getElementById("recText");
+const shareBox = document.getElementById("shareBox");
+const summaryText = document.getElementById("summaryText");
+
+const toastEl = document.getElementById("toast");
+
+/* ==========================
+   4) Helpers
+   ========================== */
+function pad(n){ return String(n).padStart(2,"0"); }
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+function totalQuestionsCount(){
+  return SECTIONS.reduce((acc,s)=>acc + s.questions.length,0);
+}
+const totalQ = totalQuestionsCount();
+
+function buildOptions(weight){
+  const dash = I18N[LANG].optionDash;
+  let html = `<option value="" selected>${dash}</option>`;
+  for(let s=1; s<=weight; s++) html += `<option value="${s}">${s}</option>`;
+  return html;
+}
+
+function gradeFromPct(p){
+  const t = I18N[LANG].grades;
+  if (p >= 85) return { label: t.excellent, color:"var(--green)" };
+  if (p >= 70) return { label: t.veryGood, color:"var(--blue)" };
+  if (p >= 55) return { label: t.ok, color:"#d48806" };
+  return { label: t.needs, color:"#d64545" };
+}
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1600);
+}
+
+/* ==========================
+   5) Render sections (language aware)
+   ========================== */
+function renderSections(){
+  mount.innerHTML = "";
+  SECTIONS.forEach(sec => {
+    const section = document.createElement("div");
+    section.className = "card section";
+    section.dataset.accent = sec.accent === "green" ? "green" : "blue";
+
+    section.innerHTML = `
+      <div class="sectionHead">
+        <div class="sectionTitle">${sec.titleKey[LANG]}</div>
+        <div class="sectionScore">
+          <div class="sectionPct" id="pct_${sec.id}">—%</div>
+          <div class="sectionLabel" id="grade_${sec.id}">${I18N[LANG].badgeNotCalculated}</div>
+        </div>
+      </div>
+      <div class="qList" id="ql_${sec.id}"></div>
+    `;
+
+    const qList = section.querySelector(`#ql_${sec.id}`);
+    sec.questions.forEach(q => {
+      const qEl = document.createElement("div");
+      qEl.className = "q";
+      qEl.innerHTML = `
+        <div class="qRow">
+          <div class="qText">${q.textKey[LANG]}</div>
+          <div style="display:flex; gap:10px; align-items:center; ${document.body.classList.contains('rtl') ? 'flex-direction:row-reverse;' : 'flex-direction:row;'}">
+            <select id="ans_${q.id}" data-weight="${q.weight}">${buildOptions(q.weight)}</select>
+            <div class="w">${LANG === "ar" ? `الوزن ${q.weight}` : `Weight ${q.weight}`}</div>
+          </div>
+        </div>
+      `;
+      qList.appendChild(qEl);
+    });
+
+    mount.appendChild(section);
+  });
+}
+
+function getAnswers(){
+  const data = {};
+  SECTIONS.forEach(sec => sec.questions.forEach(q => {
+    const el = document.getElementById(`ans_${q.id}`);
+    data[q.id] = (el && el.value !== "") ? Number(el.value) : null;
+  }));
+  return data;
+}
+
+function updateProgress(){
+  let answered = 0;
+  document.querySelectorAll('select[id^="ans_"]').forEach(sel => {
+    if (sel.value !== "") answered++;
+  });
+  const pct = totalQ ? (answered / totalQ) * 100 : 0;
+
+  const i = I18N[LANG];
+  progressText.textContent = answered === 0 ? i.progressNotStarted : i.progressText(answered, totalQ);
+  miniBar.style.width = `${clamp(pct,0,100)}%`;
+}
+
+/* ==========================
+   6) Summary + Recommendation
+   ========================== */
+function buildSummary(overallPctValue, sectionResults){
+  const i = I18N[LANG].summary;
+
+  const company = (document.getElementById("companyName").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+  const erp = (document.getElementById("erpName").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+  const date = (document.getElementById("assessDate").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+  const assessor = (document.getElementById("assessor").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+  const phone = (document.getElementById("phone").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+  const email = (document.getElementById("clientEmail").value || "").trim() || (LANG==="ar" ? "غير محدد" : "Not specified");
+
+  const lines = [];
+  lines.push(i.title);
+  lines.push("—");
+  lines.push(`${i.company}: ${company}`);
+  lines.push(`${i.erp}: ${erp}`);
+  lines.push(`${i.date}: ${date}`);
+  lines.push(`${i.assessor}: ${assessor}`);
+  lines.push(`${i.phone}: ${phone}`);
+  lines.push(`${i.email}: ${email}`);
+  lines.push("—");
+  lines.push(i.sectionResults);
+  sectionResults.forEach(s => lines.push(`- ${s.title}: ${s.pct}%`));
+  lines.push("—");
+  lines.push(`${i.overall}: ${Math.round(overallPctValue)}%`);
+  lines.push(`${i.contact}: www.majdoba.me`);
+  return lines.join("\n");
+}
+
+function weakestSection(sectionResults){
+  const filtered = sectionResults.filter(s => s.answeredMax > 0);
+  if (!filtered.length) return null;
+  filtered.sort((a,b)=>a.pct - b.pct);
+  return filtered[0];
+}
+
+function setRecommendation(overall, weak){
+  if (!weak){
+    recBox.classList.remove("show");
+    return;
+  }
+  const r = I18N[LANG].rec;
+  let pack;
+  if (overall < 70) pack = r.low(weak.title);
+  else if (overall < 85) pack = r.mid(weak.title);
+  else pack = r.high(weak.title);
+
+  recText.innerHTML = `${pack.h}<small>${pack.s}</small>`;
+  recBox.classList.add("show");
+}
+
+/* ==========================
+   7) Calculate
+   ========================== */
+function calculate(){
+  const answers = getAnswers();
+  let totalScore = 0;
+  let totalMax = 0;
+
+  const sectionResults = [];
+
+  SECTIONS.forEach(sec => {
+    let secScore = 0;
+    let secMax = 0;
+
+    sec.questions.forEach(q => {
+      const v = answers[q.id];
+      if (v !== null){
+        secScore += v;
+        secMax += q.weight;
+      }
+    });
+
+    const pct = secMax > 0 ? (secScore / secMax) * 100 : 0;
+    const g = gradeFromPct(pct);
+
+    document.getElementById(`pct_${sec.id}`).textContent = `${Math.round(pct)}%`;
+    const ge = document.getElementById(`grade_${sec.id}`);
+    ge.textContent = g.label;
+    ge.style.color = g.color;
+
+    totalScore += secScore;
+    totalMax += secMax;
+
+    sectionResults.push({
+      id: sec.id,
+      title: sec.titleKey[LANG],
+      pct: Math.round(pct),
+      answeredMax: secMax
+    });
+  });
+
+  const overall = totalMax > 0 ? (totalScore / totalMax) * 100 : 0;
+  const og = gradeFromPct(overall);
+
+  overallPct.textContent = `${Math.round(overall)}%`;
+  overallGrade.textContent = og.label;
+  overallGrade.style.color = og.color;
+
+  const i = I18N[LANG];
+  overallBadge.textContent = totalMax > 0 ? i.badgeCalculated : i.badgeNoAnswers;
+  overallBadge.style.color = totalMax > 0 ? "var(--blue)" : "var(--muted)";
+  overallBar.style.width = `${clamp(overall,0,100)}%`;
+
+  const weak = weakestSection(sectionResults);
+  setRecommendation(overall, weak);
+
+  const summary = buildSummary(overall, sectionResults);
+  summaryText.value = summary;
+
+  shareBox.classList.add("show");
+
+  btnSend.classList.add("pulse");
+  setTimeout(()=>btnSend.classList.remove("pulse"), 3000);
+
+  toast(i.toast.calculated);
+}
+
+/* ==========================
+   8) Share/Copy/Send
+   ========================== */
+async function shareText(text){
+  const i = I18N[LANG].toast;
+  try{
+    if (navigator.share){
+      await navigator.share({ text });
+      toast(i.shareOpened);
+    } else {
+      await navigator.clipboard.writeText(text);
+      toast(i.shareFallback);
+    }
+  }catch(e){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast(i.copyOk);
+    }catch(_){
+      toast(i.copyFail);
+    }
+  }
+}
+
+const DEST_EMAIL = "info@majdoba.me";
+function openMail(summary){
+  const mail = I18N[LANG].mail;
+  const subject = encodeURIComponent(mail.subject);
+  const body = encodeURIComponent(summary + "\n\n—\n" + mail.bodyFooter + "\nwww.majdoba.me");
+  const mailto = `mailto:${DEST_EMAIL}?subject=${subject}&body=${body}`;
+  window.location.href = mailto;
+}
+
+/* ==========================
+   9) Save/Load/Reset
+   ========================== */
+const STORAGE_KEY = "erp_assessment_bilingual_full_v1";
+
+function save(){
+  const payload = {
+    lang: LANG,
+    meta: {
+      companyName: document.getElementById("companyName").value || "",
+      erpName: document.getElementById("erpName").value || "",
+      assessDate: document.getElementById("assessDate").value || "",
+      assessor: document.getElementById("assessor").value || "",
+      phone: document.getElementById("phone").value || "",
+      clientEmail: document.getElementById("clientEmail").value || ""
+    },
+    answers: getAnswers()
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  toast(I18N[LANG].toast.saved);
+}
+
+function load(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw){ toast(I18N[LANG].toast.noSaved); return; }
+  const payload = JSON.parse(raw);
+
+  document.getElementById("companyName").value = payload.meta?.companyName || "";
+  document.getElementById("erpName").value = payload.meta?.erpName || "";
+  document.getElementById("assessDate").value = payload.meta?.assessDate || "";
+  document.getElementById("assessor").value = payload.meta?.assessor || "";
+  document.getElementById("phone").value = payload.meta?.phone || "";
+  document.getElementById("clientEmail").value = payload.meta?.clientEmail || "";
+
+  SECTIONS.forEach(sec => sec.questions.forEach(q => {
+    const el = document.getElementById(`ans_${q.id}`);
+    const v = payload.answers?.[q.id];
+    el.value = (v === null || v === undefined) ? "" : String(v);
+  }));
+
+  updateProgress();
+  calculate();
+  toast(I18N[LANG].toast.loaded);
+}
+
+function resetAll(){
+  if (!confirm(I18N[LANG].toast.confirmReset)) return;
+
+  ["companyName","erpName","assessDate","assessor","phone","clientEmail"].forEach(id=>{
+    document.getElementById(id).value = "";
+  });
+
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => document.getElementById(`ans_${q.id}`).value = "");
+    document.getElementById(`pct_${sec.id}`).textContent = "—%";
+    const ge = document.getElementById(`grade_${sec.id}`);
+    ge.textContent = I18N[LANG].badgeNotCalculated;
+    ge.style.color = "var(--muted)";
+  });
+
+  overallPct.textContent = "—%";
+  overallBadge.textContent = I18N[LANG].badgeNotCalculated;
+  overallBadge.style.color = "var(--muted)";
+  overallBar.style.width = "0%";
+  overallGrade.textContent = "—";
+  overallGrade.style.color = "var(--muted)";
+
+  recBox.classList.remove("show");
+  shareBox.classList.remove("show");
+  summaryText.value = "";
+
+  updateProgress();
+  toast(I18N[LANG].toast.resetDone);
+}
+
+/* ==========================
+   10) Apply language to static UI
+   ========================== */
+function applyLanguage(lang){
+  LANG = lang;
+  const t = I18N[LANG];
+
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = t.dir;
+
+  document.body.classList.toggle("rtl", t.dir === "rtl");
+  document.body.classList.toggle("ltr", t.dir === "ltr");
+
+  // header texts
+  document.getElementById("appName").textContent = t.appName;
+  document.getElementById("appTagline").textContent = t.appTagline;
+
+  // hero texts
+  document.getElementById("heroTitle").textContent = t.heroTitle;
+  document.getElementById("devTextPrefix").textContent = t.devPrefix;
+  document.getElementById("devTextName").textContent = t.devName;
+  document.getElementById("heroHint").innerHTML = t.heroHint;
+
+  // labels
+  document.getElementById("lblCompany").textContent = t.labels.company;
+  document.getElementById("lblERP").textContent = t.labels.erp;
+  document.getElementById("lblDate").textContent = t.labels.date;
+  document.getElementById("lblAssessor").textContent = t.labels.assessor;
+  document.getElementById("lblPhone").textContent = t.labels.phone;
+  document.getElementById("lblEmail").textContent = t.labels.email;
+
+  // placeholders
+  document.getElementById("companyName").placeholder = t.placeholders.company;
+  document.getElementById("erpName").placeholder = t.placeholders.erp;
+  document.getElementById("assessor").placeholder = t.placeholders.assessor;
+  document.getElementById("phone").placeholder = t.placeholders.phone;
+  document.getElementById("clientEmail").placeholder = t.placeholders.email;
+
+  // buttons
+  btnReset.textContent = t.buttons.reset;
+  btnSave.textContent = t.buttons.save;
+  btnLoad.textContent = t.buttons.load;
+  btnCalculate.textContent = t.buttons.calculate;
+
+  btnCopy.textContent = t.buttons.copy;
+  btnShare.textContent = t.buttons.share;
+  btnSend.textContent = t.buttons.send;
+
+  // overall
+  document.getElementById("overallTitle").textContent = t.overallTitle;
+
+  // share texts
+  document.getElementById("shareTitle").childNodes[0].textContent = t.shareTitle + "\n";
+  document.getElementById("shareSubtitle").textContent = t.shareSubtitle;
+  document.getElementById("sendNote").innerHTML = t.sendNote;
+
+  // formula + footer
+  document.getElementById("formulaNote").textContent = t.formulaNote;
+  document.getElementById("lastUpdateLabel").textContent = t.lastUpdate;
+
+  // language toggle UI
+  langAR.classList.toggle("active", LANG === "ar");
+  langEN.classList.toggle("active", LANG === "en");
+
+  // rerender sections in current language while preserving answers
+  const savedAnswers = getAnswers();
+  renderSections();
+  // restore answers
+  SECTIONS.forEach(sec => sec.questions.forEach(q => {
+    const el = document.getElementById(`ans_${q.id}`);
+    const v = savedAnswers[q.id];
+    el.value = (v === null || v === undefined) ? "" : String(v);
+  }));
+
+  updateProgress();
+
+  // reset calculated labels to "not calculated" if shareBox hidden
+  if (!shareBox.classList.contains("show")){
+    overallBadge.textContent = t.badgeNotCalculated;
+  }
+}
+
+/* ==========================
+   11) Clock
+   ========================== */
+function tick(){
+  const d = new Date();
+  document.getElementById("clock").textContent =
+    `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+setInterval(tick, 1000);
+tick();
+
+(function initDate(){
+  const el = document.getElementById("assessDate");
+  if (!el.value){
+    const d = new Date();
+    el.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+})();
+
+/* ==========================
+   12) Events
+   ========================== */
+langAR.addEventListener("click", () => applyLanguage("ar"));
+langEN.addEventListener("click", () => applyLanguage("en"));
+
+btnCalculate.addEventListener("click", calculate);
+btnSave.addEventListener("click", save);
+btnLoad.addEventListener("click", load);
+btnReset.addEventListener("click", resetAll);
+
+btnCopy.addEventListener("click", async () => {
+  const text = summaryText.value.trim();
+  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
+  try{
+    await navigator.clipboard.writeText(text);
+    toast(I18N[LANG].toast.copyOk);
+  }catch(e){
+    toast(I18N[LANG].toast.copyFail);
+  }
+});
+
+btnShare.addEventListener("click", async () => {
+  const text = summaryText.value.trim();
+  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
+  await shareText(text);
+});
+
+btnSend.addEventListener("click", () => {
+  const text = summaryText.value.trim();
+  if (!text){ toast(I18N[LANG].toast.needCalc); return; }
+  openMail(text);
+});
+
+// update progress on any select change
+document.addEventListener("change", (e) => {
+  if (e.target && e.target.matches('select[id^="ans_"]')) updateProgress();
+});
+
+/* ==========================
+   13) Init
+   ========================== */
+renderSections();
+applyLanguage("ar");
+updateProgress();
+</script>
+</body>
+</html>
