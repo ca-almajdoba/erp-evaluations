@@ -7,7 +7,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <!-- استيراد خط Google Sans Arabic و Google Sans بالأوزان المطلوبة -->
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Arabic:wght@300;400;700;800&family=Google+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -29,8 +30,9 @@
 
     body{
       margin:0;
-      font-family:'Almarai', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-weight: 300; /* تعيين الوزن الافتراضي إلى لايت */
+      /* تعديل الخط هنا ليعتمد على Google Sans */
+      font-family: 'Google Sans Arabic', 'Google Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 300; 
       background: var(--bg);
       color: var(--ink);
     }
@@ -82,7 +84,7 @@
       font-size: 12px;
       cursor:pointer;
       transition: transform .18s ease, box-shadow .18s ease;
-      font-family:'Almarai',sans-serif;
+      font-family: 'Google Sans Arabic', 'Google Sans', sans-serif;
       background: rgba(255,255,255,.9);
       box-shadow: 0 12px 26px rgba(18,32,47,.10);
       color: var(--ink);
@@ -120,7 +122,7 @@
       color: var(--ink);
       transition: transform .18s ease, box-shadow .18s ease;
       user-select:none;
-      font-family:'Almarai',sans-serif;
+      font-family: 'Google Sans Arabic', 'Google Sans', sans-serif;
     }
     .langChip.active{
       background: linear-gradient(135deg, rgba(0,112,192,.12), rgba(40,167,69,.12));
@@ -245,7 +247,7 @@
       background: transparent;
       font-weight: 400;
       font-size: 13px;
-      font-family:'Almarai',sans-serif;
+      font-family: 'Google Sans Arabic', 'Google Sans', sans-serif;
       color: var(--ink);
     }
     body.rtl .field input{ text-align:right; }
@@ -398,7 +400,7 @@
       flex-wrap:wrap;
     }
     .qText{
-      font-weight: 300; /* جعل الأسئلة بخط المراعي لايت */
+      font-weight: 300; 
       font-size: 13px;
       line-height: 2;
       flex: 1 1 520px;
@@ -423,7 +425,7 @@
       outline:none;
       cursor:pointer;
       min-width: 120px;
-      font-family:'Almarai',sans-serif;
+      font-family: 'Google Sans Arabic', 'Google Sans', sans-serif;
       text-align: center;
       transition: box-shadow .18s ease;
     }
@@ -579,7 +581,7 @@
             </div>
 
             <textarea id="summaryText" readonly
-              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Almarai',sans-serif; font-weight:400; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
+              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:'Google Sans Arabic', 'Google Sans', sans-serif; font-weight:400; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
 
             <div class="sub" style="margin-top:-4px;" id="sendNote">
               ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@technofuntion.com</b> لتقوم بإرسالها.
@@ -931,6 +933,8 @@ function renderSections(){
       <div class="qList" id="ql_${sec.id}"></div>
     `;
 
+    mount.appendChild(section);
+
     const qList = section.querySelector(`#ql_${sec.id}`);
     sec.questions.forEach(q => {
       const qEl = document.createElement("div");
@@ -939,270 +943,20 @@ function renderSections(){
         <div class="qRow">
           <div class="qText">${q.textKey[LANG]}</div>
           <div style="display:flex; gap:10px; align-items:center; ${document.body.classList.contains('rtl') ? 'flex-direction:row-reverse;' : 'flex-direction:row;'}">
-             <span class="w">(${q.weight})</span>
-             <select id="${q.id}" class="qSelect">
-                ${buildOptions(q.weight)}
+             <span class="w">/${q.weight}</span>
+             <select id="${q.id}">
+               ${buildOptions(q.weight)}
              </select>
           </div>
         </div>
       `;
       qList.appendChild(qEl);
     });
-    mount.appendChild(section);
-  });
-
-  // Re-attach event listeners to selectors
-  document.querySelectorAll(".qSelect").forEach(sel => {
-    sel.addEventListener("change", updateProgress);
   });
 }
 
-function updateProgress(){
-  const selects = document.querySelectorAll(".qSelect");
-  let answered = 0;
-  selects.forEach(s => { if(s.value !== "") answered++; });
-  
-  if(answered === 0){
-    progressText.textContent = I18N[LANG].progressNotStarted;
-    miniBar.style.width = "0%";
-  } else {
-    progressText.textContent = I18N[LANG].progressText(answered, totalQ);
-    miniBar.style.width = `${(answered / totalQ) * 100}%`;
-  }
-}
-
-/* ==========================
-   6) Initialization and Calculation logic
-   ========================== */
-function calculateResults(){
-  let totalScore = 0;
-  let totalWeight = 0;
-  let answeredCount = 0;
-  
-  const sectionResults = {};
-
-  SECTIONS.forEach(sec => {
-    let secScore = 0;
-    let secWeight = 0;
-    sec.questions.forEach(q => {
-      const val = document.getElementById(q.id).value;
-      if(val !== "") {
-        secScore += parseInt(val);
-        answeredCount++;
-      }
-      secWeight += q.weight;
-    });
-    sectionResults[sec.id] = { score: secScore, weight: secWeight };
-    totalScore += secScore;
-    totalWeight += secWeight;
-  });
-
-  if(answeredCount === 0){
-    toast(I18N[LANG].toast.needCalc);
-    return;
-  }
-
-  // Update Section UIs
-  let lowestSec = null;
-  let lowestPct = 101;
-
-  SECTIONS.forEach(sec => {
-    const r = sectionResults[sec.id];
-    const pct = Math.round((r.score / r.weight) * 100) || 0;
-    document.getElementById(`pct_${sec.id}`).textContent = `${pct}%`;
-    
-    const gradeInfo = gradeFromPct(pct);
-    const labelEl = document.getElementById(`grade_${sec.id}`);
-    labelEl.textContent = gradeInfo.label;
-    labelEl.style.color = gradeInfo.color;
-
-    if(pct < lowestPct) {
-      lowestPct = pct;
-      lowestSec = sec;
-    }
-  });
-
-  // Update Overall UI
-  const overallPctVal = Math.round((totalScore / totalWeight) * 100) || 0;
-  overallPct.textContent = `${overallPctVal}%`;
-  overallBar.style.width = `${overallPctVal}%`;
-  
-  const overallGradeInfo = gradeFromPct(overallPctVal);
-  overallGrade.textContent = overallGradeInfo.label;
-  overallGrade.style.color = overallGradeInfo.color;
-  overallBadge.textContent = I18N[LANG].badgeCalculated;
-
-  // Recommendations box
-  let recData;
-  if(overallPctVal < 55) {
-    recData = I18N[LANG].rec.low(lowestSec.titleKey[LANG]);
-  } else if(overallPctVal < 85) {
-    recData = I18N[LANG].rec.mid(lowestSec.titleKey[LANG]);
-  } else {
-    recData = I18N[LANG].rec.high(lowestSec.titleKey[LANG]);
-  }
-  recText.innerHTML = `${recData.h}<small>${recData.s}</small>`;
-  recBox.classList.add("show");
-
-  // Build Summary Text Box
-  buildSummary(overallPctVal, overallGradeInfo.label, sectionResults);
-  shareBox.classList.add("show");
-  toast(I18N[LANG].toast.calculated);
-}
-
-function buildSummary(overallPctVal, overallGradeLabel, sectionResults){
-  const s = I18N[LANG].summary;
-  let txt = `=== ${s.title} ===\n`;
-  txt += `${s.company}: ${document.getElementById("companyName").value || "—"}\n`;
-  txt += `${s.erp}: ${document.getElementById("erpName").value || "—"}\n`;
-  txt += `${s.date}: ${document.getElementById("assessDate").value || "—"}\n`;
-  txt += `${s.assessor}: ${document.getElementById("assessor").value || "—"}\n\n`;
-  
-  txt += `${s.sectionResults}\n`;
-  SECTIONS.forEach(sec => {
-    const r = sectionResults[sec.id];
-    const pct = Math.round((r.score / r.weight) * 100) || 0;
-    txt += `- ${sec.titleKey[LANG]}: ${pct}%\n`;
-  });
-  
-  txt += `\n${s.overall}: ${overallPctVal}% (${overallGradeLabel})\n`;
-  txt += `${s.contact}: info@majdoba.me`;
-  summaryText.value = txt;
-}
-
-// Language Switch
-function switchLanguage(lang){
-  LANG = lang;
-  document.body.className = I18N[LANG].dir;
-  document.body.dir = I18N[LANG].dir;
-  
-  // Update static text elements
-  document.getElementById("appName").textContent = I18N[LANG].appName;
-  document.getElementById("appTagline").textContent = I18N[LANG].appTagline;
-  document.getElementById("heroTitle").textContent = I18N[LANG].heroTitle;
-  document.getElementById("devTextPrefix").textContent = I18N[LANG].devPrefix;
-  document.getElementById("devTextName").textContent = I18N[LANG].devName;
-  document.getElementById("heroHint").innerHTML = I18N[LANG].heroHint;
-  
-  document.getElementById("lblCompany").textContent = I18N[LANG].labels.company;
-  document.getElementById("companyName").placeholder = I18N[LANG].placeholders.company;
-  document.getElementById("lblERP").textContent = I18N[LANG].labels.erp;
-  document.getElementById("erpName").placeholder = I18N[LANG].placeholders.erp;
-  document.getElementById("lblDate").textContent = I18N[LANG].labels.date;
-  document.getElementById("lblAssessor").textContent = I18N[LANG].labels.assessor;
-  document.getElementById("assessor").placeholder = I18N[LANG].placeholders.assessor;
-  document.getElementById("lblPhone").textContent = I18N[LANG].labels.phone;
-  document.getElementById("phone").placeholder = I18N[LANG].placeholders.phone;
-  document.getElementById("lblEmail").textContent = I18N[LANG].labels.email;
-  document.getElementById("clientEmail").placeholder = I18N[LANG].placeholders.email;
-
-  document.getElementById("btnReset").textContent = I18N[LANG].buttons.reset;
-  document.getElementById("btnSave").textContent = I18N[LANG].buttons.save;
-  document.getElementById("btnLoad").textContent = I18N[LANG].buttons.load;
-  document.getElementById("btnCalculate").textContent = I18N[LANG].buttons.calculate;
-  document.getElementById("btnCopy").textContent = I18N[LANG].buttons.copy;
-  document.getElementById("btnShare").textContent = I18N[LANG].buttons.share;
-  document.getElementById("btnSend").textContent = I18N[LANG].buttons.send;
-
-  document.getElementById("overallTitle").textContent = I18N[LANG].overallTitle;
-  document.getElementById("overallBadge").textContent = I18N[LANG].badgeNotCalculated;
-  document.getElementById("shareTitle").childNodes[0].textContent = I18N[LANG].shareTitle + " ";
-  document.getElementById("shareSubtitle").textContent = I18N[LANG].shareSubtitle;
-  document.getElementById("sendNote").innerHTML = I18N[LANG].sendNote;
-  document.getElementById("formulaNote").textContent = I18N[LANG].formulaNote;
-  document.getElementById("lastUpdateLabel").textContent = I18N[LANG].lastUpdate;
-
-  langAR.classList.toggle("active", lang === "ar");
-  langEN.classList.toggle("active", lang === "en");
-
-  // Re-render sections
-  renderSections();
-  updateProgress();
-  
-  // Hide results box until calculated again
-  recBox.classList.remove("show");
-  shareBox.classList.remove("show");
-  overallPct.textContent = "—%";
-  overallGrade.textContent = "—";
-  overallBar.style.width = "0%";
-}
-
-// Clock 
-setInterval(() => {
-  const d = new Date();
-  document.getElementById("clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}, 1000);
-
-// Basic Actions
-btnReset.addEventListener("click", () => {
-  if(confirm(I18N[LANG].toast.confirmReset)){
-    document.querySelectorAll(".qSelect").forEach(s => s.value = "");
-    updateProgress();
-    recBox.classList.remove("show");
-    shareBox.classList.remove("show");
-    overallPct.textContent = "—%";
-    overallGrade.textContent = "—";
-    overallBar.style.width = "0%";
-    overallBadge.textContent = I18N[LANG].badgeNotCalculated;
-    toast(I18N[LANG].toast.resetDone);
-  }
-});
-
-btnSave.addEventListener("click", () => {
-  const data = {};
-  SECTIONS.forEach(sec => {
-    sec.questions.forEach(q => {
-      data[q.id] = document.getElementById(q.id).value;
-    });
-  });
-  localStorage.setItem("erp_assess_data", JSON.stringify(data));
-  toast(I18N[LANG].toast.saved);
-});
-
-btnLoad.addEventListener("click", () => {
-  const local = localStorage.getItem("erp_assess_data");
-  if(!local){
-    toast(I18N[LANG].toast.noSaved);
-    return;
-  }
-  const data = JSON.parse(local);
-  Object.keys(data).forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.value = data[id];
-  });
-  updateProgress();
-  toast(I18N[LANG].toast.loaded);
-});
-
-btnCopy.addEventListener("click", () => {
-  navigator.clipboard.writeText(summaryText.value)
-    .then(() => toast(I18N[LANG].toast.copyOk))
-    .catch(() => toast(I18N[LANG].toast.copyFail));
-});
-
-btnShare.addEventListener("click", () => {
-  if (navigator.share) {
-    navigator.share({ title: I18N[LANG].summary.title, text: summaryText.value })
-      .then(() => toast(I18N[LANG].toast.shareOpened))
-      .catch(() => {});
-  } else {
-    navigator.clipboard.writeText(summaryText.value);
-    toast(I18N[LANG].toast.shareFallback);
-  }
-});
-
-btnSend.addEventListener("click", () => {
-  const sub = encodeURIComponent(I18N[LANG].mail.subject);
-  const body = encodeURIComponent(summaryText.value + "\n\n" + I18N[LANG].mail.bodyFooter);
-  window.open(`mailto:info@technofuntion.com?subject=${sub}&body=${body}`, "_self");
-});
-
-btnCalculate.addEventListener("click", calculateResults);
-langAR.addEventListener("click", () => switchLanguage("ar"));
-langEN.addEventListener("click", () => switchLanguage("en"));
-
-// Initialize view
-switchLanguage("ar");
+// تشغيل البناء المبدئي للأقسام والتفاعلات
+renderSections();
 </script>
 </body>
 </html>
