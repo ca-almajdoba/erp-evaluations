@@ -1,23 +1,1300 @@
-<!-- 1. استدعاء الخط في قسم الـ Head -->
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ERP Assessment Tool</title>
 
-<style>
-  /* 2. تطبيق الخط على كامل الصفحة أو عناصر محددة */
-  body {
-    font-family: 'Google Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- استدعاء خط Google Sans بالبديليين المتاحين رسميًا وبجميع الأوزان المطلوبة في الكود -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Product+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue:#0070C0;
+      --green:#28A745;
+      --ink:#12202f;
+      --muted:#6b7a8a;
+      --line:rgba(17,32,47,.10);
+      --shadow: 0 16px 42px rgba(18,32,47,.10);
+      --radius: 18px;
+      --focus: rgba(0,112,192,.18);
+      --bg:
+        radial-gradient(1200px 600px at 15% 5%, rgba(0,112,192,.10), transparent 60%),
+        radial-gradient(900px 500px at 85% 10%, rgba(40,167,69,.10), transparent 60%),
+        linear-gradient(180deg, #f6fbff, #f8fff9);
+      /* تعريف متغير مخصص لخط Google Sans والبدائل المتوافقة */
+      --font-family: 'Google Sans', 'Product Sans', 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family: var(--font-family);
+      font-weight: 300; /* تعيين الوزن الافتراضي إلى لايت */
+      background: var(--bg);
+      color: var(--ink);
+    }
+    body.rtl{ direction: rtl; text-align: right; }
+    body.ltr{ direction: ltr; text-align: left; }
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap{
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .mark{
+      width:38px;height:38px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(0,112,192,.18), rgba(40,167,69,.18));
+      border:1px solid rgba(0,112,192,.14);
+      position:relative; overflow:hidden;
+    }
+    .mark::before{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+      transform: translateX(-120%);
+      animation: sweep 2.6s linear infinite;
+    }
+    @keyframes sweep{ 0%{transform:translateX(-120%)} 100%{transform:translateX(120%)} }
+
+    .brand h1{ margin:0; font-size: 14px; font-weight: 800; color: var(--blue); }
+    .brand small{ display:block; margin-top:2px; color: var(--muted); font-size: 12px; font-weight: 700; }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    .btn{
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      font-family: var(--font-family);
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 12px 26px rgba(18,32,47,.10);
+      color: var(--ink);
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 36px rgba(18,32,47,.14); }
+    .btn:active{ transform: translateY(1px); }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--blue), #0b86e6);
+      color:#fff;
+      box-shadow: 0 14px 30px rgba(0,112,192,.22);
+    }
+    .btn-green{
+      background: linear-gradient(135deg, var(--green), #34c759);
+      color:#fff;
+      box-shadow: 0 14px 30px rgba(40,167,69,.20);
+    }
+
+    /* Language toggle */
+    .langToggle{
+      display:flex; gap:8px; padding:6px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.75);
+      box-shadow: 0 10px 22px rgba(18,32,47,.08);
+    }
+    .langChip{
+      border:1px solid transparent;
+      border-radius: 12px;
+      padding:8px 10px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor:pointer;
+      background: rgba(255,255,255,.9);
+      color: var(--ink);
+      transition: transform .18s ease, box-shadow .18s ease;
+      user-select:none;
+      font-family: var(--font-family);
+    }
+    .langChip.active{
+      background: linear-gradient(135deg, rgba(0,112,192,.12), rgba(40,167,69,.12));
+      border-color: rgba(0,112,192,.20);
+      box-shadow: 0 0 0 4px rgba(0,112,192,.12);
+    }
+
+    .container{
+      max-width:1150px;
+      margin: 0 auto;
+      padding: 20px 18px 60px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media(max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      background: rgba(255,255,255,.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .pad{ padding: 18px; }
+
+    .hero::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      width:100%; height:5px;
+      background: linear-gradient(90deg, var(--blue), var(--green), var(--blue));
+      background-size: 200% 100%;
+      animation: sheen 3.6s linear infinite;
+    }
+    @keyframes sheen{ 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+
+    .title{ margin: 10px 0 6px; font-size: 20px; font-weight: 800; line-height: 1.9; }
+    .devLink{
+      display:inline-flex; align-items:center; gap:10px;
+      margin: 4px 0 12px;
+      padding: 9px 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,112,192,.08), rgba(40,167,69,.08));
+      border: 1px solid rgba(0,112,192,.12);
+      text-decoration:none;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 12px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .devLink:hover{ transform: translateY(-1px); box-shadow: 0 14px 34px rgba(18,32,47,.12); }
+    .dot{ width:10px;height:10px;border-radius:999px; background: linear-gradient(135deg, var(--blue), var(--green)); }
+    .devLink span{ color: var(--blue); font-weight: 800; }
+
+    .sub{ margin:0; color: var(--muted); font-size: 13px; font-weight: 400; line-height: 2; }
+
+    /* Progress */
+    .progressBox{
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .progressText{
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .miniBarWrap{
+      flex: 1 1 240px;
+      background: rgba(0,112,192,.08);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      overflow:hidden;
+      min-width: 220px;
+    }
+    .miniBar{
+      height: 10px;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .25s ease;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+      margin-top: 14px;
+    }
+    @media(max-width:520px){ .meta{ grid-template-columns:1fr; } }
+
+    .field{
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    .field:focus-within{ box-shadow: 0 0 0 4px var(--focus); }
+    .field label{
+      display:block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field input{
+      width:100%;
+      border:0;
+      outline:none;
+      background: transparent;
+      font-weight: 400;
+      font-size: 13px;
+      font-family: var(--font-family);
+      color: var(--ink);
+    }
+    body.rtl .field input{ text-align:right; }
+    body.ltr .field input{ text-align:left; }
+
+    /* Score */
+    .score::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      width:100%; height:5px;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+    .scoreTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .badge{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+
+    .big{
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      margin-top: 10px;
+    }
+    body.rtl .big{ flex-direction: row-reverse; }
+    body.ltr .big{ flex-direction: row; }
+
+    .pct{ font-size: 40px; font-weight: 800; line-height:1; }
+    .grade{ font-size: 13px; font-weight: 800; padding-bottom: 6px; color: var(--muted); }
+
+    .barWrap{
+      margin-top: 12px;
+      background: rgba(0,112,192,.08);
+      border:1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      overflow:hidden;
+    }
+    .bar{
+      height: 12px;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .35s ease;
+    }
+
+    .box{
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.92);
+      padding: 12px;
+      display:none;
+      gap:10px;
+      flex-direction:column;
+    }
+    .box.show{ display:flex; }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .boxTitle{
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.9;
+    }
+    .boxTitle small{
+      display:block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .btnGroup{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* Sections */
+    .section{ margin-top: 16px; transition: transform .18s ease, box-shadow .18s ease; }
+    .section:hover{ transform: translateY(-2px); box-shadow: 0 16px 44px rgba(18,32,47,.14); }
+
+    .sectionHead{
+      padding: 16px 16px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      position:relative;
+    }
+    .sectionHead::before{
+      content:"";
+      position:absolute; top:0; inset-inline-start:0;
+      height:4px; width:100%;
+      background: var(--blue);
+    }
+    .section[data-accent="green"] .sectionHead::before{ background: var(--green); }
+
+    .sectionTitle{ margin:0; font-size: 14px; font-weight: 800; }
+    .sectionScore{ min-width: 160px; }
+    body.rtl .sectionScore{ text-align:left; }
+    body.ltr .sectionScore{ text-align:right; }
+
+    .sectionPct{ font-weight: 800; font-size: 18px; line-height:1.1; }
+    .sectionLabel{ font-size: 11px; font-weight: 800; color: var(--muted); margin-top: 4px; }
+
+    .qList{ padding: 0 16px 16px; display:grid; gap:10px; }
+    .q{
+      background: rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .q::before{
+      content:"";
+      position:absolute; inset-inline-start:0; top:0;
+      width:6px; height:100%;
+      background: rgba(0,112,192,.14);
+    }
+    .section[data-accent="green"] .q::before{ background: rgba(40,167,69,.14); }
+
+    .qRow{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .qText{
+      font-weight: 300; /* جعل الأسئلة بخط خفيف متناسق */
+      font-size: 13px;
+      line-height: 2;
+      flex: 1 1 520px;
+      min-width: 220px;
+    }
+
+    .w{
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--green);
+      white-space:nowrap;
+    }
+
+    select{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.97);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 9px 10px;
+      font-weight: 800;
+      font-size: 12px;
+      outline:none;
+      cursor:pointer;
+      min-width: 120px;
+      font-family: var(--font-family);
+      text-align: center;
+      transition: box-shadow .18s ease;
+    }
+    select:focus{ box-shadow: 0 0 0 4px var(--focus); }
+
+    .footer{
+      max-width:1150px;
+      margin: 0 auto;
+      padding: 0 18px 30px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .toast{
+      position: fixed;
+      inset-inline-start: 14px;
+      bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(18,32,47,.92);
+      color:#fff;
+      font-weight: 800;
+      font-size: 12px;
+      box-shadow: 0 16px 42px rgba(0,0,0,.22);
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 999;
+      pointer-events:none;
+      max-width: 92vw;
+    }
+    .toast.show{ opacity:1; transform: translateY(0); }
+
+    .pulse{ animation: pulse 1.2s ease-in-out infinite; }
+    @keyframes pulse{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-1px); } }
+  </style>
+</head>
+
+<body class="rtl">
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1 id="appName">أداة التقييم الفني لنظام ERP</h1>
+          <small id="appTagline">أداة مجانية مبسطة لقياس الوضع العام</small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="langToggle" aria-label="Language toggle">
+          <button class="langChip active" id="langAR" type="button">AR</button>
+          <button class="langChip" id="langEN" type="button">EN</button>
+        </div>
+
+        <button class="btn" id="btnReset" type="button">إعادة ضبط</button>
+        <button class="btn" id="btnSave" type="button">حفظ</button>
+        <button class="btn" id="btnLoad" type="button">تحميل</button>
+        <button class="btn btn-primary" id="btnCalculate" type="button">احتساب النتائج</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <div class="card hero">
+        <div class="pad">
+          <div class="title" id="heroTitle">التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك</div>
+
+          <a class="devLink" href="https://www.technofuntion.com" target="_blank" rel="noopener noreferrer" id="devLink">
+            <span class="dot" aria-hidden="true"></span>
+            <span id="devTextPrefix">مطور بواسطة</span>
+            <span id="devTextName">TechnoFuntion - استشاريون نظم المعلومات</span>
+          </a>
+
+          <p class="sub" id="heroHint">
+            اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.
+          </p>
+
+          <div class="progressBox">
+            <div class="progressText" id="progressText">لم تبدأ بعد</div>
+            <div class="miniBarWrap" aria-label="Progress bar">
+              <div class="miniBar" id="miniBar"></div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <div class="field">
+              <label id="lblCompany">اسم الشركة / العميل</label>
+              <input id="companyName" type="text" placeholder="مثال: شركة ABC" />
+            </div>
+            <div class="field">
+              <label id="lblERP">اسم نظام ERP</label>
+              <input id="erpName" type="text" placeholder="مثال: Odoo / SAP / Dynamics" />
+            </div>
+            <div class="field">
+              <label id="lblDate">تاريخ التقييم</label>
+              <input id="assessDate" type="date" />
+            </div>
+            <div class="field">
+              <label id="lblAssessor">اسم المُقيّم</label>
+              <input id="assessor" type="text" placeholder="مثال: أحمد " />
+            </div>
+            <div class="field">
+              <label id="lblPhone">رقم الهاتف</label>
+              <input id="phone" type="tel" placeholder="مثال: 079xxxxxxx" />
+            </div>
+            <div class="field">
+              <label id="lblEmail">البريد الإلكتروني</label>
+              <input id="clientEmail" type="email" placeholder="example@company.com" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card score">
+        <div class="pad">
+          <div class="scoreTop">
+            <div style="font-weight:800;" id="overallTitle">النتيجة الإجمالية</div>
+            <div class="badge" id="overallBadge">لم يتم الاحتساب</div>
+          </div>
+
+          <div class="big">
+            <div class="pct" id="overallPct">—%</div>
+            <div class="grade" id="overallGrade">—</div>
+          </div>
+
+          <div class="barWrap">
+            <div class="bar" id="overallBar"></div>
+          </div>
+
+          <div class="box" id="recBox">
+            <div class="boxTitle" id="recText">—<small>—</small></div>
+          </div>
+
+          <div class="box" id="shareBox">
+            <div class="row">
+              <div class="boxTitle" id="shareTitle">
+                ملخص سريع جاهز للمشاركة
+                <small id="shareSubtitle">انسخ الملخص أو شاركه مباشرة</small>
+              </div>
+              <div class="btnGroup">
+                <button class="btn" id="btnCopy" type="button">نسخ الملخص</button>
+                <button class="btn" id="btnShare" type="button">مشاركة</button>
+                <button class="btn btn-green" id="btnSend" type="button">إرسال التقرير</button>
+              </div>
+            </div>
+
+            <textarea id="summaryText" readonly
+              style="width:100%; min-height:120px; border:1px solid var(--line); border-radius:14px; padding:10px; font-family:var(--font-family); font-weight:400; color:var(--ink); background:rgba(255,255,255,.95); resize:vertical;"></textarea>
+
+            <div class="sub" style="margin-top:-4px;" id="sendNote">
+              ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@technofuntion.com</b> لتقوم بإرسالها.
+            </div>
+          </div>
+
+          <p class="sub" style="margin-top:12px;" id="formulaNote">
+            (النتيجة = مجموع الدرجات ÷ مجموع الأوزان) × 100
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="sectionsMount"></div>
+  </div>
+
+  <div class="footer">
+    <div><span id="lastUpdateLabel">آخر تحديث:</span> <span id="clock">—</span></div>
+    <div style="color:var(--blue); font-weight:800;" id="footerDev">DEVELOPED BY: TechnoFuntion</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ==========================
+   1) i18n dictionary
+   ========================== */
+const I18N = {
+  ar: {
+    dir: "rtl",
+    appName: "أداة التقييم الفني لنظام ERP",
+    appTagline: "أداة مجانية مبسطة لقياس الوضع العام",
+    heroTitle: "التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك",
+    devPrefix: "مطور بواسطة",
+    devName: "TechnoFuntion - استشاريون نظم المعلومات",
+    heroHint: 'اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.',
+    progressNotStarted: "لم تبدأ بعد",
+    progressText: (a,t) => `أجبت على ${a} من ${t} سؤال`,
+    labels: {
+      company: "اسم الشركة / العميل",
+      erp: "اسم نظام ERP",
+      date: "تاريخ التقييم",
+      assessor: "اسم المُقيّم",
+      phone: "رقم الهاتف",
+      email: "البريد الإلكتروني"
+    },
+    placeholders: {
+      company: "مثال: شركة ABC",
+      erp: "مثال: Odoo / SAP / Dynamics",
+      assessor: "مثال: أحمد ",
+      phone: "مثال: 079xxxxxxx",
+      email: "example@company.com"
+    },
+    buttons: {
+      reset: "إعادة ضبط",
+      save: "حفظ",
+      load: "تحميل",
+      calculate: "احتساب النتائج",
+      copy: "نسخ الملخص",
+      share: "مشاركة",
+      send: "إرسال التقرير"
+    },
+    overallTitle: "النتيجة الإجمالية",
+    badgeNotCalculated: "لم يتم الاحتساب",
+    badgeCalculated: "تم الاحتساب",
+    badgeNoAnswers: "لا توجد إجابات بعد",
+    formulaNote: "(النتيجة = مجموع الدرجات ÷ مجموع الأوزان) × 100",
+    shareTitle: "ملخص سريع جاهز للمشاركة",
+    shareSubtitle: "انسخ الملخص أو شاركه مباشرة",
+    sendNote: 'ملاحظة: زر “إرسال التقرير” يفتح رسالة جاهزة إلى <b>info@technofuntion.com</b> لتقوم بإرسالها.',
+    lastUpdate: "آخر تحديث:",
+    grades: {
+      excellent: "ممتاز",
+      veryGood: "جيد جدًا",
+      ok: "مقبول",
+      needs: "يحتاج تحسين"
+    },
+    rec: {
+      low: (secTitle) => ({h:`أقوى فرصة للتحسين عندكم: ${secTitle}`, s:"نصح بخطوات سريعة ومرتبة لتحسين هذا القسم خلال وقت قصير."}),
+      mid: (secTitle) => ({h:`النتيجة جيدة — والأفضلية للتحسين في: ${secTitle}`, s:"تحسين بسيط هنا غالبًا يرفع النتيجة الإجمالية بسرعة."}),
+      high:(secTitle) => ({h:`ممتاز — إذا رغبت بالتطوير، ابدأ بـ: ${secTitle}`, s:"حتى الأنظمة القوية يمكن تحسينها بالأتمتة والربط والتقارير."})
+    },
+    summary: {
+      title: "ملخص تقييم ERP (أداة مجانية)",
+      company: "الشركة",
+      erp: "نظام ERP",
+      date: "التاريخ",
+      assessor: "المُقيّم",
+      phone: "الهاتف",
+      email: "البريد",
+      sectionResults: "نتائج الأقسام:",
+      overall: "النتيجة الإجمالية",
+      contact: "للتواصل"
+    },
+    toast: {
+      calculated: "تم احتساب النتائج.",
+      saved: "تم الحفظ.",
+      loaded: "تم التحميل.",
+      noSaved: "لا توجد بيانات محفوظة.",
+      resetDone: "تمت إعادة الضبط.",
+      copyOk: "تم نسخ الملخص.",
+      copyFail: "تعذر النسخ على هذا المتصفح.",
+      shareOpened: "تم فتح المشاركة.",
+      shareFallback: "تم نسخ الملخص (المشاركة غير مدعومة على هذا الجهاز).",
+      needCalc: "قم بالاحتساب أولاً.",
+      confirmReset: "هل تريد إعادة ضبط جميع الإجابات؟"
+    },
+    mail: {
+      subject: "تقرير تقييم ERP (أداة مجانية)",
+      bodyFooter: "مرسل من أداة Majdoba"
+    },
+    optionDash: "—"
+  },
+  en: {
+    dir: "ltr",
+    appName: "ERP Technical Assessment Tool",
+    appTagline: "A free, simplified tool for a quick overview",
+    heroTitle: "Technical Assessment of Your ERP System",
+    devPrefix: "Developed by",
+    devName: "Ahmad Majdoba Technical Consulting",
+    heroHint: 'Choose a number for each question (1 up to the question weight), then click <b>Calculate Results</b>.',
+    progressNotStarted: "Not started yet",
+    progressText: (a,t) => `Answered ${a} of ${t} questions`,
+    labels: {
+      company: "Company / Client Name",
+      erp: "ERP System Name",
+      date: "Assessment Date",
+      assessor: "Assessor Name",
+      phone: "Phone Number",
+      email: "Email Address"
+    },
+    placeholders: {
+      company: "e.g., ABC Company",
+      erp: "e.g., Odoo / SAP / Dynamics",
+      assessor: "e.g., Ahmad Majdoba",
+      phone: "e.g., +962 79xxxxxxx",
+      email: "example@company.com"
+    },
+    buttons: {
+      reset: "Reset",
+      save: "Save",
+      load: "Load",
+      calculate: "Calculate Results",
+      copy: "Copy Summary",
+      share: "Share",
+      send: "Send Report"
+    },
+    overallTitle: "Overall Score",
+    badgeNotCalculated: "Not calculated",
+    badgeCalculated: "Calculated",
+    badgeNoAnswers: "No answers yet",
+    formulaNote: "(Score = Total Points ÷ Total Weights) × 100",
+    shareTitle: "Quick summary ready to share",
+    shareSubtitle: "Copy the summary or share it directly",
+    sendNote: 'Note: “Send Report” opens a prefilled email to <b>info@majdoba.me</b> for you to send.',
+    lastUpdate: "Last update:",
+    grades: {
+      excellent: "Excellent",
+      veryGood: "Very Good",
+      ok: "OK",
+      needs: "Needs Improvement"
+    },
+    rec: {
+      low: (secTitle) => ({h:`Top improvement opportunity: ${secTitle}`, s:"We recommend quick, structured steps to improve this area."}),
+      mid: (secTitle) => ({h:`Good result — best area to improve: ${secTitle}`, s:"A small improvement here can lift the overall score fast."}),
+      high:(secTitle) => ({h:`Excellent — if you want to optimize, start with: ${secTitle}`, s:"Even strong systems can improve through automation, integrations, and reporting."})
+    },
+    summary: {
+      title: "ERP Assessment Summary (Free Tool)",
+      company: "Company",
+      erp: "ERP",
+      date: "Date",
+      assessor: "Assessor",
+      phone: "Phone",
+      email: "Email",
+      sectionResults: "Section results:",
+      overall: "Overall score",
+      contact: "Contact"
+    },
+    toast: {
+      calculated: "Results calculated.",
+      saved: "Saved.",
+      loaded: "Loaded.",
+      noSaved: "No saved data found.",
+      resetDone: "Reset done.",
+      copyOk: "Summary copied.",
+      copyFail: "Copy failed on this browser.",
+      shareOpened: "Share opened.",
+      shareFallback: "Summary copied (share not supported on this device).",
+      needCalc: "Please calculate first.",
+      confirmReset: "Reset all answers?"
+    },
+    mail: {
+      subject: "ERP Assessment Report (Free Tool)",
+      bodyFooter: "Sent from Majdoba tool"
+    },
+    optionDash: "—"
   }
-</style>
-2. إذا كنت تعدل على ملف CSS منفصل (.css):
-أضف سطر الاستيراد في أول سطر من الملف تماماً، ثم حدد العناصر التي تريد تغيير خطها:
+};
 
-CSS
-/* 1. استيراد الخط في أعلى الملف */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+let LANG = "ar";
 
-/* 2. تعيين الخط للعناصر */
-body, p, h1, h2, h3, span {
-    font-family: 'Google Sans', sans-serif;
+/* ==========================
+   2) Content model with keys
+   ========================== */
+const SECTIONS = [
+  {
+    id: "governance",
+    titleKey: { ar:"1) الحوكمة والضوابط", en:"1) Governance & Controls" },
+    accent: "blue",
+    questions: [
+      { id:"gov_q1", textKey:{ar:"وضوح المسؤوليات والصلاحيات في النظام.", en:"Clear roles and permissions in the system."}, weight: 8 },
+      { id:"gov_q2", textKey:{ar:"مراجعة الصلاحيات بشكل دوري.", en:"Periodic review of user access."}, weight: 10 },
+      { id:"gov_q3", textKey:{ar:"فصل المهام (من ينشئ ومن يعتمد).", en:"Segregation of duties (create vs approve)."}, weight: 10 },
+      { id:"gov_q4", textKey:{ar:"توفر سجل تتبع للعمليات (Audit).", en:"Audit trail is available and usable."}, weight: 8 },
+      { id:"gov_q5", textKey:{ar:"إدارة تغييرات النظام بشكل منظم.", en:"System changes are managed in an organized way."}, weight: 7 }
+    ]
+  },
+  {
+    id: "finance",
+    titleKey: { ar:"2) الجانب المالي والمحاسبي", en:"2) Finance & Accounting" },
+    accent: "green",
+    questions: [
+      { id:"fin_q1", textKey:{ar:"ملاءمة شجرة الحسابات لطبيعة عملكم.", en:"Chart of accounts fits your business."}, weight: 9 },
+      { id:"fin_q2", textKey:{ar:"إعدادات الضريبة صحيحة وسهلة.", en:"Tax setup is correct and easy."}, weight: 9 },
+      { id:"fin_q3", textKey:{ar:"إقفال الفترات المالية واضح ومنظم.", en:"Period closing is clear and controlled."}, weight: 8 },
+      { id:"fin_q4", textKey:{ar:"سهولة المطابقة البنكية.", en:"Bank reconciliation is straightforward."}, weight: 7 },
+      { id:"fin_q5", textKey:{ar:"دقة التقارير المالية.", en:"Financial reports are accurate."}, weight: 10 }
+    ]
+  },
+  {
+    id: "operations",
+    titleKey: { ar:"3) العمليات (مبيعات/مشتريات/مخزون)", en:"3) Operations (Sales/Purchase/Inventory)" },
+    accent: "blue",
+    questions: [
+      { id:"ops_q1", textKey:{ar:"تغطية دورة المبيعات بشكل واضح.", en:"Sales cycle is covered clearly."}, weight: 8 },
+      { id:"ops_q2", textKey:{ar:"تغطية دورة المشتريات بشكل واضح.", en:"Purchase cycle is covered clearly."}, weight: 8 },
+      { id:"ops_q3", textKey:{ar:"دقة بيانات المخزون.", en:"Inventory data is accurate."}, weight: 10 },
+      { id:"ops_q4", textKey:{ar:"تنظيم بيانات العملاء/الموردين/الأصناف.", en:"Master data (customers/vendors/items) is well organized."}, weight: 7 },
+      { id:"ops_q5", textKey:{ar:"التعامل السهل مع المرتجعات.", en:"Returns handling is easy."}, weight: 6 }
+    ]
+  },
+  {
+    id: "tech",
+    titleKey: { ar:"4) التقنية والأمان", en:"4) Technology & Security" },
+    accent: "green",
+    questions: [
+      { id:"tech_q1", textKey:{ar:"النسخ الاحتياطي موجود ويتم الاعتماد عليه.", en:"Backups exist and are reliable."}, weight: 10 },
+      { id:"tech_q2", textKey:{ar:"استقرار النظام وسرعته.", en:"System stability and speed."}, weight: 8 },
+      { id:"tech_q3", textKey:{ar:"أمان الدخول والصلاحيات.", en:"Authentication & access security."}, weight: 10 },
+      { id:"tech_q4", textKey:{ar:"سهولة التكامل/الربط عند الحاجة.", en:"Integrations are feasible when needed."}, weight: 7 }
+    ]
+  },
+  {
+    id: "people",
+    titleKey: { ar:"5) الفريق والاستخدام", en:"5) People & Adoption" },
+    accent: "blue",
+    questions: [
+      { id:"ppl_q1", textKey:{ar:"سهولة تدريب المستخدمين.", en:"User training is easy."}, weight: 8 },
+      { id:"ppl_q2", textKey:{ar:"وجود إجراءات عمل واضحة.", en:"Clear operating procedures exist."}, weight: 8 },
+      { id:"ppl_q3", textKey:{ar:"توفر دعم فني أو شخص مسؤول.", en:"Support or an owner is available."}, weight: 7 },
+      { id:"ppl_q4", textKey:{ar:"استخدام تقارير ولوحات متابعة.", en:"Reports and dashboards are used."}, weight: 6 }
+    ]
+  }
+];
+
+/* ==========================
+   3) UI refs
+   ========================== */
+const mount = document.getElementById("sectionsMount");
+const progressText = document.getElementById("progressText");
+const miniBar = document.getElementById("miniBar");
+
+const langAR = document.getElementById("langAR");
+const langEN = document.getElementById("langEN");
+
+const btnReset = document.getElementById("btnReset");
+const btnSave = document.getElementById("btnSave");
+const btnLoad = document.getElementById("btnLoad");
+const btnCalculate = document.getElementById("btnCalculate");
+
+const btnCopy = document.getElementById("btnCopy");
+const btnShare = document.getElementById("btnShare");
+const btnSend = document.getElementById("btnSend");
+
+const overallBadge = document.getElementById("overallBadge");
+const overallPct = document.getElementById("overallPct");
+const overallGrade = document.getElementById("overallGrade");
+const overallBar = document.getElementById("overallBar");
+
+const recBox = document.getElementById("recBox");
+const recText = document.getElementById("recText");
+const shareBox = document.getElementById("shareBox");
+const summaryText = document.getElementById("summaryText");
+
+const toastEl = document.getElementById("toast");
+
+/* ==========================
+   4) Helpers
+   ========================== */
+function pad(n){ return String(n).padStart(2,"0"); }
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+function totalQuestionsCount(){
+  return SECTIONS.reduce((acc,s)=>acc + s.questions.length,0);
 }
-ملاحظة هامة: خط "Google Sans" الأصلي هو خط محمي بحقوق ملكية لشركة Google وغالباً ما يكون متاحاً للاستخدام العام في مكتبة الخطوط باسم "Open Sans" أو "Product Sans". الأكواد أعلاه تستدعي البديل الرسمي المتاح والممتاز للمواقع.
+const totalQ = totalQuestionsCount();
 
-إذا كنت تريدني أن أعدل لك الكود بدقة عالية، انسخ الكود الخاص بك واكتبه هنا في ردك القادم وسأقوم بتعديله لك فوراً!
+function buildOptions(weight){
+  const dash = I18N[LANG].optionDash;
+  let html = `<option value="" selected>${dash}</option>`;
+  for(let s=1; s<=weight; s++) html += `<option value="${s}">${s}</option>`;
+  return html;
+}
+
+function gradeFromPct(p){
+  const t = I18N[LANG].grades;
+  if (p >= 85) return { label: t.excellent, color:"var(--green)" };
+  if (p >= 70) return { label: t.veryGood, color:"var(--blue)" };
+  if (p >= 55) return { label: t.ok, color:"#d48806" };
+  return { label: t.needs, color:"#d64545" };
+}
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1600);
+}
+
+/* ==========================
+   5) Render sections (language aware)
+   ========================== */
+function renderSections(){
+  mount.innerHTML = "";
+  SECTIONS.forEach(sec => {
+    const section = document.createElement("div");
+    section.className = "card section";
+    section.dataset.accent = sec.accent === "green" ? "green" : "blue";
+
+    section.innerHTML = `
+      <div class="sectionHead">
+        <div class="sectionTitle">${sec.titleKey[LANG]}</div>
+        <div class="sectionScore">
+          <div class="sectionPct" id="pct_${sec.id}">—%</div>
+          <div class="sectionLabel" id="grade_${sec.id}">${I18N[LANG].badgeNotCalculated}</div>
+        </div>
+      </div>
+      <div class="qList" id="ql_${sec.id}"></div>
+    `;
+
+    const qList = section.querySelector(`#ql_${sec.id}`);
+    sec.questions.forEach(q => {
+      const qEl = document.createElement("div");
+      qEl.className = "q";
+      qEl.innerHTML = `
+        <div class="qRow">
+          <div class="qText">${q.textKey[LANG]}</div>
+          <div style="display:flex; gap:10px; align-items:center; ${document.body.classList.contains('rtl') ? 'flex-direction:row-reverse;' : 'flex-direction:row;'}">
+             <span class="w">(${q.weight})</span>
+             <select id="${q.id}" data-weight="${q.weight}" data-sec="${sec.id}">
+               ${buildOptions(q.weight)}
+             </select>
+          </div>
+        </div>
+      `;
+      qList.appendChild(qEl);
+    });
+
+    mount.appendChild(section);
+  });
+
+  // Attach change listeners for progress tracking
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      document.getElementById(q.id).addEventListener("change", updateProgress);
+    });
+  });
+}
+
+/* ==========================
+   6) App State & Logic
+   ========================== */
+function updateProgress(){
+  let answered = 0;
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      if(document.getElementById(q.id).value !== "") answered++;
+    });
+  });
+
+  if(answered === 0){
+    progressText.textContent = I18N[LANG].progressNotStarted;
+    miniBar.style.width = "0%";
+  } else {
+    progressText.textContent = I18N[LANG].progressText(answered, totalQ);
+    miniBar.style.width = ((answered / totalQ) * 100) + "%";
+  }
+}
+
+function calculateResults(){
+  let totalScore = 0;
+  let totalWeight = 0;
+  let hasAnswers = false;
+
+  let lowestSecId = null;
+  let lowestSecPct = 101;
+  let lowSecTitle = "";
+
+  SECTIONS.forEach(sec => {
+    let secScore = 0;
+    let secWeight = 0;
+
+    sec.questions.forEach(q => {
+      const val = document.getElementById(q.id).value;
+      if(val !== ""){
+        hasAnswers = true;
+        secScore += parseFloat(val);
+      }
+      secWeight += q.weight;
+    });
+
+    const pctEl = document.getElementById(`pct_${sec.id}`);
+    const gradeEl = document.getElementById(`grade_${sec.id}`);
+
+    if(secWeight > 0){
+      const secPct = Math.round((secScore / secWeight) * 100);
+      pctEl.textContent = secPct + "%";
+      const g = gradeFromPct(secPct);
+      gradeEl.textContent = g.label;
+      gradeEl.style.color = g.color;
+
+      if(secPct < lowestSecPct){
+        lowestSecPct = secPct;
+        lowestSecId = sec.id;
+        lowSecTitle = sec.titleKey[LANG];
+      }
+
+      totalScore += secScore;
+      totalWeight += secWeight;
+    }
+  });
+
+  if(!hasAnswers){
+    overallBadge.textContent = I18N[LANG].badgeNoAnswers;
+    overallPct.textContent = "—%";
+    overallGrade.textContent = "—";
+    overallBar.style.width = "0%";
+    recBox.classList.remove("show");
+    shareBox.classList.remove("show");
+    return;
+  }
+
+  const finalPct = Math.round((totalScore / totalWeight) * 100);
+  overallPct.textContent = finalPct + "%";
+  overallBar.style.width = finalPct + "%";
+  
+  const finalG = gradeFromPct(finalPct);
+  overallGrade.textContent = finalG.label;
+  overallGrade.style.color = finalG.color;
+  overallBadge.textContent = I18N[LANG].badgeCalculated;
+
+  // Recommendation logic
+  let recData;
+  if(finalPct < 55) recData = I18N[LANG].rec.low(lowSecTitle);
+  else if(finalPct < 85) recData = I18N[LANG].rec.mid(lowSecTitle);
+  else recData = I18N[LANG].rec.high(lowSecTitle);
+
+  recText.innerHTML = `${recData.h}<small>${recData.s}</small>`;
+  recBox.classList.add("show");
+
+  buildSummaryString(finalPct, finalG.label);
+  shareBox.classList.add("show");
+
+  toast(I18N[LANG].toast.calculated);
+}
+
+function buildSummaryString(finalPct, finalGradeName){
+  const dict = I18N[LANG].summary;
+  const cName = document.getElementById("companyName").value || "—";
+  const eName = document.getElementById("erpName").value || "—";
+  const dVal = document.getElementById("assessDate").value || "—";
+  const aName = document.getElementById("assessor").value || "—";
+  
+  let str = `*** ${dict.title} ***\n\n`;
+  str += `${dict.company}: ${cName}\n`;
+  str += `${dict.erp}: ${eName}\n`;
+  str += `${dict.date}: ${dVal}\n`;
+  str += `${dict.assessor}: ${aName}\n\n`;
+  str += `${dict.sectionResults}\n`;
+
+  SECTIONS.forEach(sec => {
+    const pct = document.getElementById(`pct_${sec.id}`).textContent;
+    const lbl = document.getElementById(`grade_${sec.id}`).textContent;
+    str += `- ${sec.titleKey[LANG]}: ${pct} (${lbl})\n`;
+  });
+
+  str += `\n${dict.overall}: ${finalPct}% (${finalGradeName})\n`;
+  summaryText.value = str;
+}
+
+/* ==========================
+   7) Storage & Clipboard
+   ========================== */
+function saveData(){
+  const data = { meta: {}, answers: {} };
+  ["companyName","erpName","assessDate","assessor","phone","clientEmail"].forEach(id => {
+    data.meta[id] = document.getElementById(id).value;
+  });
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      data.answers[q.id] = document.getElementById(q.id).value;
+    });
+  });
+  localStorage.setItem("erp_assess_data", JSON.stringify(data));
+  toast(I18N[LANG].toast.saved);
+}
+
+function loadData(){
+  const raw = localStorage.getItem("erp_assess_data");
+  if(!raw){
+    toast(I18N[LANG].toast.noSaved);
+    return;
+  }
+  const data = JSON.parse(raw);
+  if(data.meta){
+    Object.keys(data.meta).forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.value = data.meta[id];
+    });
+  }
+  if(data.answers){
+    Object.keys(data.answers).forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.value = data.answers[id];
+    });
+  }
+  updateProgress();
+  toast(I18N[LANG].toast.loaded);
+}
+
+function resetForm(){
+  if(!confirm(I18N[LANG].toast.confirmReset)) return;
+  ["companyName","erpName","assessDate","assessor","phone","clientEmail"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      document.getElementById(q.id).value = "";
+    });
+  });
+  
+  // Clear scores
+  SECTIONS.forEach(sec => {
+    document.getElementById(`pct_${sec.id}`).textContent = "—%";
+    document.getElementById(`grade_${sec.id}`).textContent = I18N[LANG].badgeNotCalculated;
+    document.getElementById(`grade_${sec.id}`).style.color = "var(--muted)";
+  });
+
+  overallPct.textContent = "—%";
+  overallGrade.textContent = "—";
+  overallBar.style.width = "0%";
+  overallBadge.textContent = I18N[LANG].badgeNotCalculated;
+  
+  recBox.classList.remove("show");
+  shareBox.classList.remove("show");
+  
+  updateProgress();
+  toast(I18N[LANG].toast.resetDone);
+}
+
+function copySummary(){
+  if(!summaryText.value) return;
+  summaryText.select();
+  summaryText.setSelectionRange(0, 99999);
+  try {
+    navigator.clipboard.writeText(summaryText.value);
+    toast(I18N[LANG].toast.copyOk);
+  } catch(e) {
+    toast(I18N[LANG].toast.copyFail);
+  }
+}
+
+function shareSummary(){
+  if(!summaryText.value) return;
+  if(navigator.share){
+    navigator.share({ title: I18N[LANG].summary.title, text: summaryText.value })
+      .then(() => toast(I18N[LANG].toast.shareOpened))
+      .catch(() => {});
+  } else {
+    copySummary();
+    toast(I18N[LANG].toast.shareFallback);
+  }
+}
+
+function sendReport(){
+  const mailData = I18N[LANG].mail;
+  const target = LANG === "ar" ? "info@technofuntion.com" : "info@majdoba.me";
+  const subject = encodeURIComponent(mailData.subject);
+  const body = encodeURIComponent(summaryText.value + `\n\n---\n${mailData.bodyFooter}`);
+  window.open(`mailto:${target}?subject=${subject}&body=${body}`, '_blank');
+}
+
+/* ==========================
+   8) Language Switcher Engine
+   ========================== */
+function applyLanguage(){
+  const dict = I18N[LANG];
+  document.body.className = dict.dir;
+  
+  // Static textual updates
+  document.getElementById("appName").textContent = dict.appName;
+  document.getElementById("appTagline").textContent = dict.appTagline;
+  document.getElementById("heroTitle").textContent = dict.heroTitle;
+  document.getElementById("devTextPrefix").textContent = dict.devPrefix;
+  document.getElementById("devTextName").textContent = dict.devName;
+  document.getElementById("heroHint").innerHTML = dict.heroHint;
+  document.getElementById("overallTitle").textContent = dict.overallTitle;
+  document.getElementById("formulaNote").textContent = dict.formulaNote;
+  document.getElementById("shareTitle").innerHTML = `${dict.shareTitle}<small id="shareSubtitle">${dict.shareSubtitle}</small>`;
+  document.getElementById("sendNote").innerHTML = dict.sendNote;
+  document.getElementById("lastUpdateLabel").textContent = dict.lastUpdate;
+
+  // Buttons
+  btnReset.textContent = dict.buttons.reset;
+  btnSave.textContent = dict.buttons.save;
+  btnLoad.textContent = dict.buttons.load;
+  btnCalculate.textContent = dict.buttons.calculate;
+  btnCopy.textContent = dict.buttons.copy;
+  btnShare.textContent = dict.buttons.share;
+  btnSend.textContent = dict.buttons.send;
+
+  // Metadata Fields & Placeholders
+  ["company","erp","date","assessor","phone","email"].forEach(k => {
+    const capitalized = k.charAt(0).toUpperCase() + k.slice(1);
+    const lbl = document.getElementById(`lbl${capitalized}`);
+    if(lbl) lbl.textContent = dict.labels[k];
+  });
+
+  ["companyName","erpName","assessor","phone","clientEmail"].forEach(id => {
+    const input = document.getElementById(id);
+    if(input){
+      const key = id === "companyName" ? "company" : id === "erpName" ? "erp" : id === "clientEmail" ? "email" : id;
+      input.placeholder = dict.placeholders[key] || "";
+    }
+  });
+
+  // Re-render structural blocks
+  const savedAnswers = {};
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach(q => {
+      const el = document.getElementById(q.id);
+      if(el) savedAnswers[q.id] = el.value;
+    });
+  });
+
+  renderSections();
+
+  // Restore state after re-render
+  Object.keys(savedAnswers).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = savedAnswers[id];
+  });
+
+  updateProgress();
+
+  // Reset scoring widgets to clear view until recalculation
+  overallBadge.textContent = dict.badgeNotCalculated;
+  overallPct.textContent = "—%";
+  overallGrade.textContent = "—";
+  overallBar.style.width = "0%";
+  recBox.classList.remove("show");
+  shareBox.classList.remove("show");
+}
+
+/* ==========================
+   9) Init & Events
+   ========================== */
+langAR.addEventListener("click", () => {
+  if(LANG === "ar") return;
+  LANG = "ar";
+  langAR.classList.add("active");
+  langEN.classList.remove("active");
+  applyLanguage();
+});
+
+langEN.addEventListener("click", () => {
+  if(LANG === "en") return;
+  LANG = "en";
+  langEN.classList.add("active");
+  langAR.classList.remove("active");
+  applyLanguage();
+});
+
+btnCalculate.addEventListener("click", calculateResults);
+btnSave.addEventListener("click", saveData);
+btnLoad.addEventListener("click", loadData);
+btnReset.addEventListener("click", resetForm);
+btnCopy.addEventListener("click", copySummary);
+btnShare.addEventListener("click", shareSummary);
+btnSend.addEventListener("click", sendReport);
+
+// Run clock
+setInterval(() => {
+  const d = new Date();
+  document.getElementById("clock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}, 1000);
+
+// Default boot
+renderSections();
+updateProgress();
+document.getElementById("assessDate").valueAsDate = new Date();
+</script>
+</body>
+</html>
