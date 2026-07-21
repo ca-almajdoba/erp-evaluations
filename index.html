@@ -477,7 +477,7 @@
       <div class="brand">
         <div class="mark" aria-hidden="true"></div>
         <div>
-          <h1 id="appName">أداة التقييم الفني لنظام ERP</h1>
+          <h1 id="appName"> التقييم الفني الأولي لنظام ERP</h1>
           <small id="appTagline">أداة مجانية مبسطة لقياس الوضع العام</small>
         </div>
       </div>
@@ -500,12 +500,12 @@
     <div class="grid">
       <div class="card hero">
         <div class="pad">
-          <div class="title" id="heroTitle">التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك</div>
+          <div class="title" id="heroTitle">التقييم الفني الاولي لنظام تخطيط موارد المؤسسات الخاص بك</div>
 
           <a class="devLink" href="https://www.technofuntion.com" target="_blank" rel="noopener noreferrer" id="devLink">
             <span class="dot" aria-hidden="true"></span>
             <span id="devTextPrefix">مطور بواسطة</span>
-            <span id="devTextName">TechnoFuntion - استشاريون نظم المعلومات</span>
+            <span id="devTextName">TechnoFuntion - مؤسسة أحمد المجدوبة لأنظمة المعلومات </span>
           </a>
 
           <p class="sub" id="heroHint">
@@ -525,7 +525,7 @@
               <input id="companyName" type="text" placeholder="مثال: شركة ABC" />
             </div>
             <div class="field">
-              <label id="lblERP">اسم نظام ERP</label>
+              <label id="lblERP">اسم نظام </label>
               <input id="erpName" type="text" placeholder="مثال: Odoo / SAP / Dynamics" />
             </div>
             <div class="field">
@@ -613,11 +613,11 @@
 const I18N = {
   ar: {
     dir: "rtl",
-    appName: "أداة التقييم الفني لنظام ERP",
+    appName: "أداة التقييم الفني الأولي لنظام ERP",
     appTagline: "أداة مجانية مبسطة لقياس الوضع العام",
-    heroTitle: "التقييم الفني لنظام تخطيط موارد المؤسسات الخاص بك",
+    heroTitle: "التقييم الفني الأولي لنظام تخطيط موارد المؤسسات الخاص بك",
     devPrefix: "مطور بواسطة",
-    devName: "TechnoFuntion - استشاريون نظم المعلومات",
+    devName: "TechnoFuntion - مؤسسة أحمد المجدوبة لأنظمة المعلومات",
     heroHint: 'اختر رقم لكل سؤال (من 1 حتى وزن السؤال)، ثم اضغط <b>احتساب النتائج</b>.',
     progressNotStarted: "لم تبدأ بعد",
     progressText: (a,t) => `أجبت على ${a} من ${t} سؤال`,
@@ -702,7 +702,7 @@ const I18N = {
     appTagline: "A free, simplified tool for a quick overview",
     heroTitle: "Technical Assessment of Your ERP System",
     devPrefix: "Developed by",
-    devName: "Ahmad Majdoba Technical Consulting",
+    devName: "TchnoFuntion",
     heroHint: 'Choose a number for each question (1 up to the question weight), then click <b>Calculate Results</b>.',
     progressNotStarted: "Not started yet",
     progressText: (a,t) => `Answered ${a} of ${t} questions`,
@@ -737,7 +737,7 @@ const I18N = {
     formulaNote: "(Score = Total Points ÷ Total Weights) × 100",
     shareTitle: "Quick summary ready to share",
     shareSubtitle: "Copy the summary or share it directly",
-    sendNote: 'Note: “Send Report” opens a prefilled email to <b>info@majdoba.me</b> for you to send.',
+    sendNote: 'Note: “Send Report” opens a prefilled email to <b>info@technofuntion.com</b> for you to send.',
     lastUpdate: "Last update:",
     grades: {
       excellent: "Excellent",
@@ -777,7 +777,7 @@ const I18N = {
     },
     mail: {
       subject: "ERP Assessment Report (Free Tool)",
-      bodyFooter: "Sent from Majdoba tool"
+      bodyFooter: "Sent from TechnoFuntion tool"
     },
     optionDash: "—"
   }
@@ -1180,7 +1180,7 @@ function shareSummary(){
 
 function sendReport(){
   const mailData = I18N[LANG].mail;
-  const target = LANG === "ar" ? "info@technofuntion.com" : "info@majdoba.me";
+  const target = LANG === "ar" ? "info@technofuntion.com" : "info@technofuntion.com";
   const subject = encodeURIComponent(mailData.subject);
   const body = encodeURIComponent(summaryText.value + `\n\n---\n${mailData.bodyFooter}`);
   window.open(`mailto:${target}?subject=${subject}&body=${body}`, '_blank');
